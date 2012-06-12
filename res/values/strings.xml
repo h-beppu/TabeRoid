@@ -4,6 +4,7 @@
     <string name="api_key">96d24714e814675c7a8cd129c18608151cf2bf9b</string>
     <string name="button_search">検索</string>
     <string name="button_share_map">地図で見る</string>
+    <string name="button_review_more">続きを読む</string>
     <string name="label_search_gps">現在の位置情報で検索</string>
     <string name="label_search_station">最寄駅で検索</string>
     <string name="label_result">検索結果</string>
@@ -29,6 +30,23 @@
     <string name="label_tab1">詳細</string>
     <string name="label_tab2">口コミ</string>
     <string name="label_tab3">地図</string>
+
+    <string name="label_rv_nickname">投稿ユーザー名</string>
+    <string name="label_rv_visitdate">レストラン訪問日</string>
+    <string name="label_rv_reviewdate">口コミ投稿日</string>
+    <string name="label_rv_usetype">口コミ対象</string>
+    <string name="label_rv_situations">オススメシチュ</string>
+    <string name="label_rv_totalscore">点数(総合評価)</string>
+    <string name="label_rv_tastescore">料理・味の点数</string>
+    <string name="label_rv_servicescore">サービスの点数</string>
+    <string name="label_rv_moodscore">雰囲気の点数</string>
+    <string name="label_rv_dinnerprice">使った金額/1人当り(夜)</string>
+    <string name="label_rv_lunchprice">使った金額/1人当り(昼)</string>
+    <string name="label_rv_title">口コミのタイトル</string>
+    <string name="label_rv_comment">口コミのコメント</string>
+    <string name="label_rv_pcsiteurl">口コミページ(PC)のURL</string>
+    <string name="label_rv_mobilesiteurl">口コミページ(モバイル)のURL</string>
+
     <color name="bgcolor">#FFFFFF</color>
     <color name="header_bgcolor">#409040</color>
     <color name="header_color">#202020</color>
