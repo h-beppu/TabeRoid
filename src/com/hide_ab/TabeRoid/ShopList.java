@@ -180,11 +180,6 @@ public class ShopList extends Activity {
     //
     //
 	class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
-		// コンストラクタ
-	    public ImageDrawer() {
-	    	;
-	    }
-
 	    // バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
@@ -222,7 +217,7 @@ public class ShopList extends Activity {
 	}
 
 	//
-	//
+    // バックグラウンドタスク
 	//
 	class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
 		protected ProgressDialog progressdialog;
@@ -236,10 +231,10 @@ public class ShopList extends Activity {
 		@Override
 		protected void onPreExecute() {
 			// バックグラウンドの処理前にUIスレッドでダイアログ表示
-			progressdialog = new ProgressDialog(ShopList.this);
-			progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
-			progressdialog.setIndeterminate(true);
-			progressdialog.show();
+			this.progressdialog = new ProgressDialog(ShopList.this);
+			this.progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
+			this.progressdialog.setIndeterminate(true);
+			this.progressdialog.show();
 		}
 
 		// バックグラウンドで実行する処理
@@ -253,7 +248,7 @@ public class ShopList extends Activity {
 	    @Override  
 	    protected void onPostExecute(Integer params) {
 			// 処理中ダイアログをクローズ
-	    	progressdialog.dismiss();
+	    	this.progressdialog.dismiss();
 
 	    	// 追加読み込み完了
 			closeMore(this.Num);

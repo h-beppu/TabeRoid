@@ -38,7 +38,13 @@ public class TabeRoid extends Activity implements LocationListener {
 
 		// 検索結果店舗データオブジェクト生成
 	    this.shopinfos = (ShopInfos)this.getApplication();
-	    
+    	// デフォルト写真の設定
+		Resources r = getResources();
+		shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
+    	// 評価マーク素材
+    	shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
+    	shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
+
 	    // GPS初期化
         mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
@@ -165,7 +171,7 @@ public class TabeRoid extends Activity implements LocationListener {
     }
 
     //
-    //
+    // バックグラウンドタスク
     //
 	class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
 		protected ProgressDialog progressdialog;
@@ -173,21 +179,16 @@ public class TabeRoid extends Activity implements LocationListener {
 
 		// コンストラクタ
 	    public TabeRoidTask() {
-	    	// デフォルト写真の設定
-			Resources r = getResources();
-	    	shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
-	    	// 評価マーク素材
-	    	shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
-	    	shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
+			this.Num = 0;
 	    }
 
 		@Override
 		protected void onPreExecute() {
 	    	// バックグラウンドの処理前にUIスレッドでダイアログ表示
-			progressdialog = new ProgressDialog(TabeRoid.this);
-			progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
-			progressdialog.setIndeterminate(true);
-			progressdialog.show();
+			this.progressdialog = new ProgressDialog(TabeRoid.this);
+			this.progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
+			this.progressdialog.setIndeterminate(true);
+			this.progressdialog.show();
 		}
 
 		// バックグラウンドで実行する処理
@@ -201,10 +202,10 @@ public class TabeRoid extends Activity implements LocationListener {
 	    @Override
 	    protected void onPostExecute(Integer params) {
 			// 処理中ダイアログをクローズ
-	    	progressdialog.dismiss();
+	    	this.progressdialog.dismiss();
 
-	    	TextView locationText = (TextView)findViewById(R.id.text_location);
-	        locationText.setText("Click" + this.Num);
+	    	TextView text_location = (TextView)findViewById(R.id.text_location);
+	    	text_location.setText("Click" + this.Num);
 
 			// "ShopList"画面に移行
 			openShopList();

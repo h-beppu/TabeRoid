@@ -29,6 +29,7 @@ public class ShopDetail extends TabActivity {
 	private ShopDetailAdapter shopdetailadapter = null;
 	protected String Lat;
 	protected String Lon;
+	protected int position;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -45,11 +46,40 @@ public class ShopDetail extends TabActivity {
 		// 検索結果店舗データオブジェクト生成
 	    shopinfos = (ShopInfos)this.getApplication();
 
-	    // 呼び出し元からパラメータ取得
-        Intent intent = getIntent();
-        int position = intent.getIntExtra("Position", 0);
+        // 『ナビ』ボタンクリックハンドラ
+        ImageView image_navi1 = (ImageView)findViewById(R.id.image_navi1);
+        image_navi1.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View view) {
+				position--;
+				if(position < 0) {
+					position = 0;
+				}
+				else {
+			        // 指定データの表示
+			        MakeView();
+				}
+        	}
+        });
+        ImageView image_navi2 = (ImageView)findViewById(R.id.image_navi2);
+        image_navi2.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View view) {
+				position++;
+		        // 指定データの表示
+		        MakeView();
+        	}
+        });
 
-        ShopInfo shopInfo = shopinfos.getInfo(position);
+        // 呼び出し元からパラメータ取得
+        Intent intent = getIntent();
+        this.position = intent.getIntExtra("Position", 0);
+
+        // 指定データの表示
+        this.MakeView();
+	}
+
+	// 指定データの表示
+	private void MakeView() {
+        ShopInfo shopInfo = shopinfos.getInfo(this.position);
 
         TextView tvRestaurantName = (TextView)findViewById(R.id.RestaurantName);
         tvRestaurantName.setText(shopInfo.getRestaurantName());
@@ -154,7 +184,7 @@ public class ShopDetail extends TabActivity {
         	}
         });
 	}
-
+	
     // コメント取得完了
     public void closeReview(ShopInfo shopinfo) {
     	// ListからShopDetailAdapterを生成
@@ -164,21 +194,20 @@ public class ShopDetail extends TabActivity {
     	// listview_reviewsにshopdetailadapterをセット
     	listview_reviews.setAdapter(shopdetailadapter);
     }
-/*
+
 	// ダイアログの表示
-    protected void showDialog(final Activity activity, String title, String text) {
+    protected void showDialog(final TabActivity activity, String title, String text) {
     	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
     	ad.setTitle(title);
     	ad.setMessage(text);
     	ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
     		public void onClick(DialogInterface dialog, int wichiButton) {
-    			activity.setResult(Activity.RESULT_OK);
+    			activity.setResult(TabActivity.RESULT_OK);
     		}
     	});
     	ad.create();
     	ad.show();
     }
-*/
 
     //
     //
@@ -186,7 +215,6 @@ public class ShopDetail extends TabActivity {
 	class ShopDetailAdapter extends ArrayAdapter<ReviewInfo> {
 		private ArrayList<ReviewInfo> List;
 		private LayoutInflater inflater;
-		private Button button_review_more;
 		private TextView text_review_more;
 
 		@SuppressWarnings("unchecked")

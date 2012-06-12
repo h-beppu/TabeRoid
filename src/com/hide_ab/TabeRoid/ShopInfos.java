@@ -12,8 +12,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.widget.TextView;
 
 public class ShopInfos extends Application {
 	// 表示するデータのリスト
