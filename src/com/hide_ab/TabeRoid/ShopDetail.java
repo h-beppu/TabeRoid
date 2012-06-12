@@ -1,12 +1,22 @@
 package com.hide_ab.TabeRoid;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import android.app.ProgressDialog;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.Projection;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,23 +31,35 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-public class ShopDetail extends BaseActivity {
+public class ShopDetail extends MapActivity {
+	// 検索結果店舗データオブジェクト
+	protected ShopInfos shopinfos;
+
 	// ListAdapter
 	private ShopDetailAdapter shopdetailadapter = null;
 	protected int position;
 	protected String Lat;
 	protected String Lon;
 	protected Resources r;
+    private MapView map;
+    private Bitmap Marker;
+    private MapController controller;
+    private List<Overlay> overlays;
+    private IconOverlay overlay;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+    	// 検索結果店舗データオブジェクトの取得
+	    this.shopinfos = (ShopInfos)this.getApplication();
+
+		// 画面構成を適用
 	    setContentView(R.layout.shop_detail);
 
 		this.r = getResources();
+        this.Marker = BitmapFactory.decodeResource(this.r, R.drawable.icon);
 
-		// 画面構成を適用
         // TabHostオブジェクト取得   
         TabHost tabHost = (TabHost)findViewById(android.R.id.tabhost);       
         tabHost.setup();   
@@ -45,7 +67,16 @@ public class ShopDetail extends BaseActivity {
 	    tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getResources().getString(R.string.label_tab1)).setContent(R.id.view1));
 	    tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.label_tab2)).setContent(R.id.view2));
 	    tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator(getResources().getString(R.string.label_tab3)).setContent(R.id.view3));
-        // 初期表示設定
+
+	    // 地図初期化
+	    this.map = (MapView)findViewById(R.id.map);
+	    this.map.setEnabled(true);
+	    this.map.setBuiltInZoomControls(true);
+	    this.controller = this.map.getController();
+        this.overlays = this.map.getOverlays();
+        this.overlay = new IconOverlay(this.Marker);
+
+	    // 初期表示設定
         tabHost.setCurrentTab(0);
 
         // 『ナビ』ボタンクリックハンドラ
@@ -97,6 +128,8 @@ public class ShopDetail extends BaseActivity {
         tvRestaurantName.setText(shopInfo.getRestaurantName());
         TextView tvRestaurantName2 = (TextView)findViewById(R.id.RestaurantName2);
         tvRestaurantName2.setText(shopInfo.getRestaurantName());
+        TextView tvRestaurantName3 = (TextView)findViewById(R.id.RestaurantName3);
+        tvRestaurantName3.setText(shopInfo.getRestaurantName());
 /*
         TextView tvTabelogUrl = (TextView)findViewById(R.id.TabelogUrl);
         tvTabelogUrl.setText(shopInfo.getTabelogUrl());
@@ -168,13 +201,16 @@ public class ShopDetail extends BaseActivity {
 
 		ImageView ivPhoto1 = (ImageView)findViewById(R.id.Photo);
 		ImageView ivPhoto2 = (ImageView)findViewById(R.id.Photo2);
+		ImageView ivPhoto3 = (ImageView)findViewById(R.id.Photo3);
         if(shopInfo.getPhoto() != null) {
 			ivPhoto1.setImageBitmap(shopInfo.getPhoto());
 			ivPhoto2.setImageBitmap(shopInfo.getPhoto());
+			ivPhoto3.setImageBitmap(shopInfo.getPhoto());
 		}
         else {
 			ivPhoto1.setImageBitmap(BitmapFactory.decodeResource(this.r, R.drawable.icon));
 			ivPhoto2.setImageBitmap(BitmapFactory.decodeResource(this.r, R.drawable.icon));
+			ivPhoto3.setImageBitmap(BitmapFactory.decodeResource(this.r, R.drawable.icon));
         }
 
         // 口コミを一旦クリア
@@ -200,6 +236,18 @@ public class ShopDetail extends BaseActivity {
         		startActivity(intent);
         	}
         });
+
+        // 地図の制御
+        double dLat = new Double(this.Lat);
+        double dLon = new Double(this.Lon);
+        GeoPoint point = new GeoPoint(new Double(dLat * 1E6).intValue(), new Double(dLon * 1E6).intValue());
+        this.controller.setCenter(point);
+        this.controller.setZoom(16);
+
+        // 生成したOverlayクラスを追加する
+        this.overlay.setPoint(point);
+        this.overlays.clear();
+        this.overlays.add(this.overlay);
 	}
 	
     // 口コミ取得完了
@@ -223,7 +271,49 @@ public class ShopDetail extends BaseActivity {
     	listview_reviews.setAdapter(shopdetailadapter);
     }
 
-    //
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+
+	// 地図上に表示されるオーバーレイ
+	private class IconOverlay extends Overlay {
+		// 描画するアイコン
+		private Bitmap Marker;
+		private int mOffsetX;
+		private int mOffsetY;
+		// アイコンを表示する位置
+		private GeoPoint mPoint;
+
+		// コンストラクタ
+		public IconOverlay(Bitmap Marker) {
+			// アイコンと、アイコンの中心のオフセット
+			this.Marker = Marker;
+			this.mOffsetX = 0 - Marker.getWidth() / 2;
+			this.mOffsetY = 0 - Marker.getHeight() / 2;
+		}
+
+		// 地図の描画時に、shadow=true, shadow=falseと2回呼び出される
+		@Override
+		public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+			super.draw(canvas, mapView, shadow);
+			if(!shadow) {
+				// 地図上の場所と、描画用のCanvasの座標の変換
+				Projection projection = mapView.getProjection();
+				Point point = new Point();
+				projection.toPixels(this.mPoint, point);
+				point.offset(this.mOffsetX, this.mOffsetY);
+				// アイコンを描画
+				canvas.drawBitmap(this.Marker, point.x, point.y, null);
+			}
+		}
+
+		public void setPoint(GeoPoint Point) {
+			this.mPoint = Point;
+		}
+	};
+
+	//
     // リストアダプタ
     //
 	class ShopDetailAdapter extends ArrayAdapter<ReviewInfo> {
