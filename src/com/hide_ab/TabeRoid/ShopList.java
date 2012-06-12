@@ -20,9 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ListView;
 
-public class ShopList extends Activity {
-	// 検索結果店舗データオブジェクト
-	protected ShopInfos shopinfos;
+public class ShopList extends BaseActivity {
 	// ListAdapter
 	private ShopListAdapter shoplistadapter = null;
 	// フッタのView
@@ -36,9 +34,7 @@ public class ShopList extends Activity {
 	    // 画面構成を適用
 	    setContentView(R.layout.shop_list);
 
-		// 検索結果店舗データオブジェクト生成
-	    this.shopinfos = (ShopInfos)this.getApplication();
-
+	    // タイトルに検索結果件数を表示
 	    this.setTitle(this.getTitle() + " - (" + this.shopinfos.NumOfResult() + "件)");
 
     	// ShopAdapterをShopList.xml内にあるlistview_resultsに渡して内容を表示する
@@ -52,10 +48,6 @@ public class ShopList extends Activity {
     	// listview_resultsにshoplistadapterをセット
     	listview_results.setAdapter(this.shoplistadapter);
     	
-		// 画像はバックグラウンドで取得
-		ImageDrawer imagedrawer = new ImageDrawer();
-		imagedrawer.execute();
-
     	// listview_resultsにOnItemClickListenerを設定
     	listview_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	    	public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
@@ -82,10 +74,6 @@ public class ShopList extends Activity {
 	// 追加読み込み完了
     public void closeMore(int Num) {
     	try {
-    		// 画像はバックグラウンドで取得
-    		ImageDrawer imagedrawer = new ImageDrawer();   
-    		imagedrawer.execute();
-
 			ListView listview_results = (ListView)findViewById(R.id.listview_results);
 
 			if(Num <= 0) {
@@ -99,20 +87,6 @@ public class ShopList extends Activity {
         } catch (Exception e) {
 			showDialog(this, "", "Error1."+e.getMessage());
         }
-    }
-
-    // ダイアログの表示
-    protected void showDialog(final Activity activity, String title, String text) {
-    	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
-    	ad.setTitle(title);
-    	ad.setMessage(text);
-    	ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-    		public void onClick(DialogInterface dialog, int wichiButton) {
-    			activity.setResult(Activity.RESULT_OK);
-    		}
-    	});
-    	ad.create();
-    	ad.show();
     }
 
     //
@@ -144,7 +118,17 @@ public class ShopList extends Activity {
 				// スクリーンネームをビューにセット
 				ImageView image_photo = (ImageView)view.findViewById(R.id.image_photo);
 				if(image_photo != null) {
-					image_photo.setImageBitmap(shopInfo.getPhoto());
+					Bitmap Photo = shopInfo.getPhoto();
+					if(Photo == null) {
+						Photo = shopinfos.getDefaultPhoto();
+						// 画像取得タスクが走っていなければ
+						if(!shopInfo.getPhotoGetTask()) {
+							// バックグラウンドで画像を取得
+							PhotoGetTask task = new PhotoGetTask(shopInfo);
+							task.execute("");
+						}
+					}
+					image_photo.setImageBitmap(Photo);
 				}
 
 				TextView tvRestaurantName = (TextView)view.findViewById(R.id.RestaurantName);
@@ -174,46 +158,6 @@ public class ShopList extends Activity {
 			}
 			return view;
 		}
-	}
-
-    //
-    //
-    //
-	class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
-	    // バックグラウンドで実行する処理
-	    @Override
-	    protected Integer doInBackground(Integer... params) {
-	    	ShopInfo shopinfo;
-	    	Bitmap Photo;
-
-	    	ArrayList<ShopInfo> List = shopinfos.getList();
-	        for(int i = 0; i < List.size(); i++) {
-	            shopinfo = List.get(i);
-	            // 画像が未取得なら
-	            if(!shopinfo.getPhotoFlg()) {
-	                // 画像の取得
-	            	Photo = shopinfo.ImportPhoto();
-	            	if(Photo != null) {
-	            		shopinfo.setPhoto(Photo);
-	            	}
-	            	publishProgress(0);
-	            }
-	        }
-	        return(0);
-	    }
-
-	    @Override
-	    protected void onProgressUpdate(Integer... progress) {
-	        // 結果表示を再描画
-	    	shoplistadapter.notifyDataSetChanged();
-	    }
-
-	    // メインスレッドで実行する処理  
-	    @Override  
-	    protected void onPostExecute(Integer params) {
-	        // 結果表示を再描画
-	    	shoplistadapter.notifyDataSetChanged();
-	    }
 	}
 
 	//
@@ -252,6 +196,35 @@ public class ShopList extends Activity {
 
 	    	// 追加読み込み完了
 			closeMore(this.Num);
+	    }
+	}
+
+	//
+    // バックグラウンドタスク
+	//
+	class PhotoGetTask extends AsyncTask<String, Void, Bitmap> {
+		private ShopInfo shopinfo;
+
+		// コンストラクタ
+	    public PhotoGetTask(ShopInfo shopinfo) {
+	    	this.shopinfo = shopinfo;
+	    	// 写真取得タスク稼働中
+	    	this.shopinfo.setPhotoGetTask(true);
+	    }
+
+	    // バックグラウンドで実行する処理
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	    	return(this.shopinfo.ImportPhoto());
+	    }
+
+	    // メインスレッドで実行する処理  
+	    @Override  
+	    protected void onPostExecute(Bitmap result) {
+	        // 結果表示を再描画
+	    	ShopList.this.shoplistadapter.notifyDataSetChanged();
+	    	// 写真取得タスク稼働完了
+	    	this.shopinfo.setPhotoGetTask(false);
 	    }
 	}
 }

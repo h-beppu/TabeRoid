@@ -22,9 +22,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-public class ShopDetail extends Activity {
-	// 検索結果店舗データオブジェクト
-	protected ShopInfos shopinfos;
+public class ShopDetail extends BaseActivity {
 	// ListAdapter
 	private ShopDetailAdapter shopdetailadapter = null;
 	protected String Lat;
@@ -48,15 +46,13 @@ public class ShopDetail extends Activity {
         // 初期表示設定
         tabHost.setCurrentTab(0);
 
-		// 検索結果店舗データオブジェクト生成
-	    shopinfos = (ShopInfos)this.getApplication();
-
         // 『ナビ』ボタンクリックハンドラ
         ImageView image_navi1 = (ImageView)findViewById(R.id.image_navi1);
         image_navi1.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-				position--;
-				if(position < 0) {
+        		// データポインタを前に
+        		position--;
+				if(--position < 0) {
 					position = 0;
 				}
 				else {
@@ -68,9 +64,15 @@ public class ShopDetail extends Activity {
         ImageView image_navi2 = (ImageView)findViewById(R.id.image_navi2);
         image_navi2.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
+        		// データポインタを次に
 				position++;
-		        // 指定データの表示
-		        MakeView();
+				if(position > shopinfos.getNumOfItem() - 1) {
+					position = shopinfos.getNumOfItem() - 1;
+				}
+				else {
+					// 指定データの表示
+			        MakeView();
+				}
         	}
         });
 
@@ -84,7 +86,7 @@ public class ShopDetail extends Activity {
 
 	// 指定データの表示
 	private void MakeView() {
-        ShopInfo shopInfo = shopinfos.getInfo(this.position);
+        ShopInfo shopInfo = this.shopinfos.getInfo(this.position);
 
         TextView tvRestaurantName = (TextView)findViewById(R.id.RestaurantName);
         tvRestaurantName.setText(shopInfo.getRestaurantName());
@@ -198,20 +200,6 @@ public class ShopDetail extends Activity {
     	ListView listview_reviews = (ListView)findViewById(R.id.listview_reviews);
     	// listview_reviewsにshopdetailadapterをセット
     	listview_reviews.setAdapter(shopdetailadapter);
-    }
-
-	// ダイアログの表示
-    protected void showDialog(final Activity activity, String title, String text) {
-    	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
-    	ad.setTitle(title);
-    	ad.setMessage(text);
-    	ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-    		public void onClick(DialogInterface dialog, int wichiButton) {
-    			activity.setResult(Activity.RESULT_OK);
-    		}
-    	});
-    	ad.create();
-    	ad.show();
     }
 
     //

@@ -26,26 +26,46 @@ public class ShopInfos extends Application {
 	protected int PageNum;
     // 検索結果件数
 	protected int NumOfResult;
+	// 取得済みデータ件数
+	protected int NumOfItem;
 	// ベースURL
 	protected String XmlUrlBase;
 	// API URL
 	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&ResultSet=large&";
 //	protected static final String XML_URL_D = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&Datum=world&Latitude=35.726&Longitude=139.988";
 
-//	protected TabeRoid taberoid;
 	protected String SearchKey;
 	protected String Lat;
 	protected String Lon;
 	protected String Station;
 
-	public Bitmap DefaultPhoto;
-	public Bitmap StarBack;
-	public Bitmap StarFront;
+	// デフォルト写真
+	protected Bitmap DefaultPhoto;
+	// 評価マーク
+	protected Bitmap StarBack;
+	protected Bitmap StarFront;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		this.List = new ArrayList<ShopInfo>();
+	}
+
+	public int getNumOfItem() {
+		return(this.List.size());
+	}
+
+	public void setDefaultPhoto(Bitmap DefaultPhoto) {
+		this.DefaultPhoto = DefaultPhoto;
+	}
+
+	public Bitmap getDefaultPhoto() {
+		return(this.DefaultPhoto);
+	}
+
+	public void setStar(Bitmap StarBack, Bitmap StarFront) {
+		this.StarBack  = StarBack;
+		this.StarFront = StarFront;
 	}
 
 	public ArrayList<ShopInfo> getList() {
@@ -64,6 +84,7 @@ public class ShopInfos extends Application {
 		return(this.NumOfResult);
 	}
 
+	// 検索前準備処理(結果格納バッファのクリア＆検索条件設定)
 	public void preSearch(String SearchKey, String Lat, String Lon, String Station) {
 		this.SearchKey = SearchKey;
 		this.Lat = Lat;
@@ -337,7 +358,7 @@ public class ShopInfos extends Application {
             	}
 
             	// 取得した各データをshopInfoに格納
-            	ShopInfo shopInfo = new ShopInfo(this.StarBack, this.StarFront);
+            	ShopInfo shopInfo = new ShopInfo(this.DefaultPhoto, this.StarBack, this.StarFront);
             	shopInfo.setRcd(Rcd);
             	shopInfo.setRestaurantName(RestaurantName);
             	shopInfo.setTabelogUrl(TabelogUrl);
@@ -357,7 +378,7 @@ public class ShopInfos extends Application {
             	shopInfo.setHoliday(Holiday);
             	shopInfo.setLat(Lat);
             	shopInfo.setLon(Lon);
-        		shopInfo.setDefaultPhoto(this.DefaultPhoto);
+//        		shopInfo.setDefaultPhoto(this.DefaultPhoto);
 
         		// リストに追加
             	this.putInfo(shopInfo);

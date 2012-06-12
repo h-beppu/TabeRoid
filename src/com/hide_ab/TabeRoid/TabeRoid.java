@@ -19,9 +19,7 @@ import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.EditText;
 
-public class TabeRoid extends Activity implements LocationListener {
-	// 検索結果店舗データオブジェクト
-	protected ShopInfos shopinfos;
+public class TabeRoid extends BaseActivity implements LocationListener {
 	// 検索条件
 	private LocationManager mLm;
     private String Lat = "35.70209";
@@ -36,16 +34,13 @@ public class TabeRoid extends Activity implements LocationListener {
         // 画面構成を適用
         setContentView(R.layout.taberoid);
 
-		// 検索結果店舗データオブジェクト生成
-	    this.shopinfos = (ShopInfos)this.getApplication();
-    	// デフォルト写真の設定
+		// 画像素材の設定
 		Resources r = getResources();
-		shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
-    	// 評価マーク素材
-    	shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
-    	shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
+		this.shopinfos.setDefaultPhoto(BitmapFactory.decodeResource(r, R.drawable.icon));
+		this.shopinfos.setStar(BitmapFactory.decodeResource(r, R.drawable.star_back),
+								BitmapFactory.decodeResource(r, R.drawable.star_front));
 
-	    // GPS初期化
+		// GPS初期化
         mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
 //        mLm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);

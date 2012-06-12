@@ -7,6 +7,7 @@
 		android:orientation="vertical"  
 	    android:layout_width="fill_parent"    
 	    android:layout_height="fill_parent"  
+	    android:background="@color/bgcolor"
 	    android:padding="5dp">
         <TabWidget
  			android:id="@android:id/tabs"
@@ -39,7 +40,7 @@
 				android:id="@+id/RestaurantName"
 				android:layout_width="wrap_content"
    	    	    android:layout_height="wrap_content"
-   	    	    android:textSize="24sp"
+   	    	    android:textSize="20sp"
    	    	    android:textColor="@color/header_color" />
 		</LinearLayout>
 		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -348,7 +349,7 @@
 				android:id="@+id/RestaurantName2"
 				android:layout_width="wrap_content"
    	    	    android:layout_height="wrap_content"
-   	    	    android:textSize="24sp"
+   	    	    android:textSize="20sp"
    	    	    android:textColor="@color/header_color" />
 		</LinearLayout>
 		<ListView

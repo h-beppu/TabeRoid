@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 
 public class ShopInfo {
 	private String Rcd;
@@ -40,18 +41,18 @@ public class ShopInfo {
 	private Bitmap TasteScoreStar;
 	private Bitmap ServiceScoreStar;
 	private Bitmap MoodScoreStar;
-	private Bitmap Photo;
-	private Boolean PhotoFlg;
 	private ArrayList<ReviewInfo> Reviews;
+	private Bitmap Photo;
 	private Bitmap StarBack;
 	private Bitmap StarFront;
+	private boolean PhotoGetTask;
 
     // ÉxÅ[ÉXURL
 	protected String XmlUrlBase;
 	// API URL
 	protected static final String XML_URL = "http://api.tabelog.com/Ver1/ReviewSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&";
 
-	public ShopInfo(Bitmap StarBack, Bitmap StarFront) {
+	public ShopInfo(Bitmap DefaultPhoto, Bitmap StarBack, Bitmap StarFront) {
 		this.Rcd = "";
 		this.RestaurantName = "";
 		this.TabelogUrl = "";
@@ -76,10 +77,18 @@ public class ShopInfo {
 		this.ServiceScoreStar = null;
 		this.MoodScoreStar = null;
 		this.Photo = null;
-		this.PhotoFlg = false;
 		this.Reviews = new ArrayList<ReviewInfo>();
 		this.StarBack  = StarBack;
 		this.StarFront = StarFront;
+		this.PhotoGetTask = false;
+	}
+
+	public boolean getPhotoGetTask() {
+		return this.PhotoGetTask;
+	}
+
+	public void setPhotoGetTask(boolean Flag) {
+		this.PhotoGetTask = Flag;
 	}
 
 	public String getRcd() {
@@ -258,21 +267,19 @@ public class ShopInfo {
 		return this.MoodScoreStar;
 	}
 
-	public void setDefaultPhoto(Bitmap Photo) {
-		this.Photo = Photo;
-	}
+//	public void setDefaultPhoto(Bitmap Photo) {
+//		this.Photo = Photo;
+//	}
 
 	public void setPhoto(Bitmap Photo) {
-		this.PhotoFlg = true;
 		this.Photo = Photo;
 	}
 
 	public Bitmap getPhoto() {
+//		if(this.Photo == null) {
+//			return this.DefaultPhoto;
+//		}
 		return this.Photo;
-	}
-
-	public Boolean getPhotoFlg() {
-		return this.PhotoFlg;
 	}
 
 	public ArrayList<ReviewInfo> getReviews() {
@@ -545,6 +552,7 @@ public class ShopInfo {
         				ImgUrl = ell.getNodeValue();
         				url = new URL(ImgUrl);
         				PhotoTmp = BitmapFactory.decodeStream(url.openStream());
+        				this.Photo = PhotoTmp;
         			}
         		}
     		}
