@@ -333,7 +333,7 @@ public class ShopInfos extends Application {
             	}
 
             	// 取得した各データをshopInfoに格納
-            	ShopInfo shopInfo = new ShopInfo();
+            	ShopInfo shopInfo = new ShopInfo(this.StarBack, this.StarFront);
             	shopInfo.setRcd(Rcd);
             	shopInfo.setRestaurantName(RestaurantName);
             	shopInfo.setTabelogUrl(TabelogUrl);
@@ -353,7 +353,6 @@ public class ShopInfos extends Application {
             	shopInfo.setHoliday(Holiday);
             	shopInfo.setLat(Lat);
             	shopInfo.setLon(Lon);
-        		shopInfo.setTotalScoreStar(this.StarFront);
         		shopInfo.setDefaultPhoto(this.DefaultPhoto);
 
         		// リストに追加

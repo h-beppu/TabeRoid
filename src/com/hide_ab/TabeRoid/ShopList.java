@@ -1,12 +1,22 @@
 package com.hide_ab.TabeRoid;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ListView;
 
@@ -15,7 +25,9 @@ public class ShopList extends Activity {
 	protected ShopInfos shopinfos;
 	// ListAdapter
 	private ShopListAdapter shoplistadapter = null;
-	
+	// フッタのView
+	private View FooterView;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,15 +41,17 @@ public class ShopList extends Activity {
 
 	    this.setTitle(this.getTitle() + " - (" + this.shopinfos.NumOfResult() + "件)");
 
+    	// ShopAdapterをShopList.xml内にあるlistview_resultsに渡して内容を表示する
+	    ListView listview_results = (ListView)findViewById(R.id.listview_results);
 	    // ListからShopAdapterを生成
 	    this.shoplistadapter = new ShopListAdapter(this, R.layout.shop_listrow, shopinfos.getList());
-    	// ShopAdapterをShopList.xml内にあるlistview_resultsに渡して内容を表示する
-    	ListView listview_results = (ListView)findViewById(R.id.listview_results);
     	// listview_resultsにフッターを追加
-    	listview_results.addFooterView(getLayoutInflater().inflate(R.layout.shop_listfooter, null), null, true);
+    	this.FooterView = getLayoutInflater().inflate(R.layout.shop_listfooter, null);
+	    listview_results.addFooterView(this.FooterView);
+
     	// listview_resultsにshoplistadapterをセット
     	listview_results.setAdapter(this.shoplistadapter);
-
+    	
 		// 画像はバックグラウンドで取得
 		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);
 		imagedrawer.execute();
@@ -66,18 +80,25 @@ public class ShopList extends Activity {
 	}
 
 	// 追加読み込み完了
-    public void closeMore() {
-		// 画像はバックグラウンドで取得
-		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);   
-		imagedrawer.execute();
+    public void closeMore(int Num) {
+    	try {
+    		// 画像はバックグラウンドで取得
+    		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);   
+    		imagedrawer.execute();
 
-    	// listview_resultsからフッターを削除
-    	ListView listview_results = (ListView)findViewById(R.id.listview_results);
-    	listview_results.removeFooterView(getLayoutInflater().inflate(R.layout.shop_listfooter, null));
+			ListView listview_results = (ListView)findViewById(R.id.listview_results);
 
-    	// 再描画
-    	listview_results.invalidateViews();
-		shoplistadapter.notifyDataSetChanged();
+			if(Num <= 0) {
+    			// listview_resultsからフッターを削除
+    			listview_results.removeFooterView(this.FooterView);
+    		}
+
+    		// 再描画
+    		listview_results.invalidateViews();
+    		shoplistadapter.notifyDataSetChanged();
+        } catch (Exception e) {
+			showDialog(this, "", "Error1."+e.getMessage());
+        }
     }
 
     // ダイアログの表示
@@ -93,4 +114,160 @@ public class ShopList extends Activity {
     	ad.create();
     	ad.show();
     }
+
+    //
+    //
+    //
+	class ShopListAdapter extends ArrayAdapter<ShopInfo> {
+		private ArrayList<ShopInfo> List;
+		private LayoutInflater inflater;
+
+		@SuppressWarnings("unchecked")
+		public ShopListAdapter(Context context, int textViewResourceId, ArrayList<ShopInfo> List) {
+			super(context, textViewResourceId, List);
+			this.List = List;
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// ビューを受け取る
+			View view = convertView;
+			// 受け取ったビューがnullなら新しくビューを生成
+			if(view == null) {
+				view = inflater.inflate(R.layout.shop_listrow, null);
+			}
+
+			// 表示すべきデータの取得
+			ShopInfo shopInfo = (ShopInfo)List.get(position);
+			if(shopInfo != null) {
+				// スクリーンネームをビューにセット
+				ImageView image_photo = (ImageView)view.findViewById(R.id.image_photo);
+				if(image_photo != null) {
+					image_photo.setImageBitmap(shopInfo.getPhoto());
+				}
+
+				TextView tvRestaurantName = (TextView)view.findViewById(R.id.RestaurantName);
+				if(tvRestaurantName != null) {
+					tvRestaurantName.setText(shopInfo.getRestaurantName());
+				}
+
+				ImageView ivTotalScoreStar = (ImageView)view.findViewById(R.id.TotalScoreStar);
+				if(ivTotalScoreStar != null) {
+					ivTotalScoreStar.setImageBitmap(shopInfo.getTotalScoreStar());
+				}
+
+				TextView tvTotalScore = (TextView)view.findViewById(R.id.TotalScore);
+				if(tvTotalScore != null) {
+					tvTotalScore.setText("("+shopInfo.getTotalScore()+")");
+				}
+
+				TextView tvCategory = (TextView)view.findViewById(R.id.Category);
+				if(tvCategory != null) {
+					tvCategory.setText(shopInfo.getCategory());
+				}
+
+				TextView tvStation = (TextView)view.findViewById(R.id.Station);
+				if(tvStation != null) {
+					tvStation.setText(shopInfo.getStation());
+				}
+			}
+			return view;
+		}
+	}
+
+    //
+    //
+    //
+	class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
+		// 検索結果店舗データオブジェクト
+		protected ShopInfos shopinfos;
+		// 結果表示のListAdapter
+		private ShopListAdapter shoplistadapter;
+
+		// コンストラクタ
+	    public ImageDrawer(ShopInfos shopinfosP, ShopListAdapter shoplistadapterP) {
+	    	this.shopinfos = shopinfosP;
+	    	this.shoplistadapter = shoplistadapterP;
+	    }
+
+	    // バックグラウンドで実行する処理
+	    @Override
+	    protected Integer doInBackground(Integer... params) {
+	    	ShopInfo shopinfo;
+	    	Bitmap Photo;
+
+	    	ArrayList<ShopInfo> List = this.shopinfos.getList();
+	        for(int i = 0; i < List.size(); i++) {
+	            shopinfo = List.get(i);
+	            // 画像が未取得なら
+	            if(!shopinfo.getPhotoFlg()) {
+	                // 画像の取得
+	            	Photo = shopinfo.ImportPhoto();
+	            	if(Photo != null) {
+	            		shopinfo.setPhoto(Photo);
+	            	}
+	            	publishProgress(0);
+	            }
+	        }
+	        return(0);
+	    }
+
+	    @Override
+	    protected void onProgressUpdate(Integer... progress) {
+	        // 結果表示を再描画
+	    	this.shoplistadapter.notifyDataSetChanged();
+	    }
+
+	    // メインスレッドで実行する処理  
+	    @Override  
+	    protected void onPostExecute(Integer params) {
+	        // 結果表示を再描画
+	    	this.shoplistadapter.notifyDataSetChanged();
+	    }
+	}
+
+	//
+	//
+	//
+	class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
+		// 検索結果店舗データオブジェクト
+		protected ShopInfos shopinfos;
+		// アクティビティ
+		protected ShopList shoplist;
+		protected ProgressDialog progressdialog;
+		protected int Num;
+
+		// コンストラクタ
+	    public ShopListTask(ShopInfos shopinfosP, ShopList shoplistP) {
+	    	this.shopinfos = shopinfosP;
+	    	this.shoplist = shoplistP;
+	    }
+
+		@Override
+		protected void onPreExecute() {
+			// バックグラウンドの処理前にUIスレッドでダイアログ表示
+			progressdialog = new ProgressDialog(this.shoplist);
+			progressdialog.setMessage(this.shoplist.getResources().getText(R.string.label_dataloading));
+			progressdialog.setIndeterminate(true);
+			progressdialog.show();
+		}
+
+		// バックグラウンドで実行する処理
+	    @Override
+	    protected Integer doInBackground(Integer... params) {
+	    	this.Num = this.shopinfos.ImportData();
+	    	return(this.Num);
+	    }
+
+	    // メインスレッドで実行する処理
+	    @Override  
+	    protected void onPostExecute(Integer params) {
+			// 処理中ダイアログをクローズ
+	    	progressdialog.dismiss();
+
+	    	// 追加読み込み完了
+			this.shoplist.closeMore(this.Num);
+	    }
+	}
 }

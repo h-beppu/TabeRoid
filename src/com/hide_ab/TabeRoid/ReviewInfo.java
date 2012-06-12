@@ -1,5 +1,9 @@
 package com.hide_ab.TabeRoid;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 public class ReviewInfo {
 	private String NickName;
 	private String VisitDate;
@@ -16,8 +20,14 @@ public class ReviewInfo {
 	private String Comment;
 	private String PcSiteUrl;
 	private String MobileSiteUrl;
+	private Bitmap TotalScoreStar;
+	private Bitmap TasteScoreStar;
+	private Bitmap ServiceScoreStar;
+	private Bitmap MoodScoreStar;
+	private Bitmap StarBack;
+	private Bitmap StarFront;
 
-	public ReviewInfo() {
+	public ReviewInfo(Bitmap StarBack, Bitmap StarFront) {
 		this.NickName = "";
 		this.VisitDate = "";
 		this.ReviewDate = "";
@@ -33,6 +43,8 @@ public class ReviewInfo {
 		this.Comment = "";
 		this.PcSiteUrl = "";
 		this.MobileSiteUrl = "";
+		this.StarBack  = StarBack;
+		this.StarFront = StarFront;
 	}
 
 	public String getNickName() {
@@ -81,6 +93,8 @@ public class ReviewInfo {
 
 	public void setTotalScore(String TotalScore) {
 		this.TotalScore = TotalScore;
+		// 評価マーク生成
+		this.TotalScoreStar = this.createMarkStar(TotalScore);
 	}
 
 	public String getTasteScore() {
@@ -89,6 +103,8 @@ public class ReviewInfo {
 
 	public void setTasteScore(String TasteScore) {
 		this.TasteScore = TasteScore;
+		// 評価マーク生成
+		this.TasteScoreStar = this.createMarkStar(TasteScore);
 	}
 
 	public String getServiceScore() {
@@ -97,6 +113,8 @@ public class ReviewInfo {
 
 	public void setServiceScore(String ServiceScore) {
 		this.ServiceScore = ServiceScore;
+		// 評価マーク生成
+		this.ServiceScoreStar = this.createMarkStar(ServiceScore);
 	}
 
 	public String getMoodScore() {
@@ -105,6 +123,8 @@ public class ReviewInfo {
 
 	public void setMoodScore(String MoodScore) {
 		this.MoodScore = MoodScore;
+		// 評価マーク生成
+		this.MoodScoreStar = this.createMarkStar(MoodScore);
 	}
 
 	public String getDinnerPrice() {
@@ -153,5 +173,37 @@ public class ReviewInfo {
 
 	public void setMobileSiteUrl(String MobileSiteUrl) {
 		this.MobileSiteUrl = MobileSiteUrl;
+	}
+
+	public Bitmap getTotalScoreStar() {
+		return this.TotalScoreStar;
+	}
+
+	public Bitmap getTasteScoreStar() {
+		return this.TasteScoreStar;
+	}
+
+	public Bitmap getServiceScoreStar() {
+		return this.ServiceScoreStar;
+	}
+
+	public Bitmap getMoodScoreStar() {
+		return this.MoodScoreStar;
+	}
+
+	// 評価マーク生成
+	private Bitmap createMarkStar(String Score) {
+		// とりあえず背景分を設定
+		int width  = this.StarBack.getWidth();
+		int height = this.StarBack.getHeight();
+		Bitmap MarkStar = Bitmap.createBitmap(this.StarBack, 0, 0, width, height);
+		// 評価分のBitmapを生成
+		width  = (int)(this.StarFront.getWidth() * (Float.parseFloat(Score) / 5));
+		Bitmap Tmp = Bitmap.createBitmap(this.StarFront, 0, 0, width, height);
+		// 合成
+		Canvas offScreen = new Canvas(MarkStar);
+		offScreen.drawBitmap(Tmp, 0, 0, (Paint)null);
+
+		return(MarkStar);
 	}
 }

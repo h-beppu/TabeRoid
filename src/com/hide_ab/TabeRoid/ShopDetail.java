@@ -1,13 +1,21 @@
 package com.hide_ab.TabeRoid;
 
+import java.util.ArrayList;
+
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -55,14 +63,34 @@ public class ShopDetail extends TabActivity {
         TextView tvTotalScore = (TextView)findViewById(R.id.TotalScore);
         tvTotalScore.setText(shopInfo.getTotalScore());
 
-        TextView tvTasteScore = (TextView)findViewById(R.id.TasteScore);
+		ImageView ivTotalScoreStar = (ImageView)findViewById(R.id.TotalScoreStar);
+		if(ivTotalScoreStar != null) {
+			ivTotalScoreStar.setImageBitmap(shopInfo.getTotalScoreStar());
+		}
+
+		TextView tvTasteScore = (TextView)findViewById(R.id.TasteScore);
         tvTasteScore.setText(shopInfo.getTasteScore());
+
+		ImageView ivTasteScoreStar = (ImageView)findViewById(R.id.TasteScoreStar);
+		if(ivTasteScoreStar != null) {
+			ivTasteScoreStar.setImageBitmap(shopInfo.getTasteScoreStar());
+		}
 
         TextView tvServiceScore = (TextView)findViewById(R.id.ServiceScore);
         tvServiceScore.setText(shopInfo.getServiceScore());
 
-        TextView tvMoodScore = (TextView)findViewById(R.id.MoodScore);
+		ImageView ivServiceScoreStar = (ImageView)findViewById(R.id.ServiceScoreStar);
+		if(ivServiceScoreStar != null) {
+			ivServiceScoreStar.setImageBitmap(shopInfo.getServiceScoreStar());
+		}
+
+		TextView tvMoodScore = (TextView)findViewById(R.id.MoodScore);
         tvMoodScore.setText(shopInfo.getMoodScore());
+
+		ImageView ivMoodScoreStar = (ImageView)findViewById(R.id.MoodScoreStar);
+		if(ivMoodScoreStar != null) {
+			ivMoodScoreStar.setImageBitmap(shopInfo.getTasteScoreStar());
+		}
 
         TextView tvSituation = (TextView)findViewById(R.id.Situation);
         tvSituation.setText(shopInfo.getSituation());
@@ -142,4 +170,199 @@ public class ShopDetail extends TabActivity {
     	ad.show();
     }
 */
+
+
+
+
+	class ShopDetailAdapter extends ArrayAdapter<ReviewInfo> {
+		private ArrayList<ReviewInfo> List;
+		private LayoutInflater inflater;
+		private Button button_review_more;
+
+		@SuppressWarnings("unchecked")
+		public ShopDetailAdapter(Context context, int textViewResourceId, ArrayList<ReviewInfo> List) {
+			super(context, textViewResourceId, List);
+			this.List = List;
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// ビューを受け取る
+			View view = convertView;
+			// 受け取ったビューがnullなら新しくビューを生成
+			if(view == null) {
+				view = inflater.inflate(R.layout.shop_detailrow, null);
+			}
+
+			// 表示すべきデータの取得
+			final ReviewInfo reviewInfo = (ReviewInfo)List.get(position);
+			if(reviewInfo != null) {
+				// スクリーンネームをビューにセット
+				TextView tvNickName = (TextView)view.findViewById(R.id.NickName);
+				tvNickName.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvNickName != null) {
+					tvNickName.setText(reviewInfo.getNickName());
+				}
+				TextView tvVisitDate = (TextView)view.findViewById(R.id.VisitDate);
+				tvVisitDate.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvVisitDate != null) {
+					tvVisitDate.setText(reviewInfo.getVisitDate());
+				}
+
+				TextView tvReviewDate = (TextView)view.findViewById(R.id.ReviewDate);
+				tvReviewDate.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvReviewDate != null) {
+					tvReviewDate.setText(reviewInfo.getReviewDate());
+				}
+
+				TextView tvUseType = (TextView)view.findViewById(R.id.UseType);
+				tvUseType.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvUseType != null) {
+					tvUseType.setText(reviewInfo.getUseType());
+				}
+
+				TextView tvSituations = (TextView)view.findViewById(R.id.Situations);
+				tvSituations.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvSituations != null) {
+					tvSituations.setText(reviewInfo.getSituations());
+				}
+				TextView tvTotalScore = (TextView)view.findViewById(R.id.TotalScore);
+				tvTotalScore.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvTotalScore != null) {
+					tvTotalScore.setText(reviewInfo.getTotalScore());
+				}
+				ImageView ivTotalScoreStar = (ImageView)view.findViewById(R.id.TotalScoreStar);
+				if(ivTotalScoreStar != null) {
+					ivTotalScoreStar.setImageBitmap(reviewInfo.getTotalScoreStar());
+				}
+
+				TextView tvTasteScore = (TextView)view.findViewById(R.id.TasteScore);
+				tvTasteScore.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvTasteScore != null) {
+					tvTasteScore.setText(reviewInfo.getTasteScore());
+				}
+				ImageView ivTasteScoreStar = (ImageView)view.findViewById(R.id.TasteScoreStar);
+				if(ivTasteScoreStar != null) {
+					ivTasteScoreStar.setImageBitmap(reviewInfo.getTasteScoreStar());
+				}
+
+				TextView tvServiceScore = (TextView)view.findViewById(R.id.ServiceScore);
+				tvServiceScore.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvServiceScore != null) {
+					tvServiceScore.setText(reviewInfo.getServiceScore());
+				}
+				ImageView ivServiceScoreStar = (ImageView)view.findViewById(R.id.ServiceScoreStar);
+				if(ivServiceScoreStar != null) {
+					ivServiceScoreStar.setImageBitmap(reviewInfo.getServiceScoreStar());
+				}
+
+				TextView tvMoodScore = (TextView)view.findViewById(R.id.MoodScore);
+				tvMoodScore.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvMoodScore != null) {
+					tvMoodScore.setText(reviewInfo.getMoodScore());
+				}
+				ImageView ivMoodScoreStar = (ImageView)view.findViewById(R.id.MoodScoreStar);
+				if(ivMoodScoreStar != null) {
+					ivMoodScoreStar.setImageBitmap(reviewInfo.getMoodScoreStar());
+				}
+
+				TextView tvDinnerPrice = (TextView)view.findViewById(R.id.DinnerPrice);
+				tvDinnerPrice.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvDinnerPrice != null) {
+					tvDinnerPrice.setText(reviewInfo.getDinnerPrice());
+				}
+
+				TextView tvLunchPrice = (TextView)view.findViewById(R.id.LunchPrice);
+				tvLunchPrice.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvLunchPrice != null) {
+					tvLunchPrice.setText(reviewInfo.getLunchPrice());
+				}
+
+				TextView tvTitle = (TextView)view.findViewById(R.id.Title);
+				tvTitle.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvTitle != null) {
+					tvTitle.setText(reviewInfo.getTitle());
+				}
+
+				TextView tvComment = (TextView)view.findViewById(R.id.Comment);
+				tvComment.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvComment != null) {
+					tvComment.setText(reviewInfo.getComment());
+				}
+/*
+				TextView tvPcSiteUrl = (TextView)view.findViewById(R.id.PcSiteUrl);
+				tvPcSiteUrl.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvPcSiteUrl != null) {
+					tvPcSiteUrl.setText(reviewInfo.getPcSiteUrl());
+				}
+
+				TextView tvMobileSiteUrl = (TextView)view.findViewById(R.id.MobileSiteUrl);
+				tvMobileSiteUrl.setTypeface(Typeface.DEFAULT_BOLD);
+				if(tvMobileSiteUrl != null) {
+					tvMobileSiteUrl.setText(reviewInfo.getMobileSiteUrl());
+				}
+*/
+
+		        // 『もっと読む』ボタン取得
+		        button_review_more = (Button)view.findViewById(R.id.button_review_more);
+
+		        // 『もっと読む』ボタンクリックハンドラ
+		        button_review_more.setOnClickListener(new View.OnClickListener() {
+		        	public void onClick(View view) {
+		        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewInfo.getPcSiteUrl()));
+		        		startActivity(intent);
+		        	}
+		        });
+			}
+			return view;
+		}
+	}
+
+	//
+	//
+	//
+	class ShopDetailTask extends AsyncTask<Integer, Integer, Integer> {
+		// 店舗データオブジェクト
+		protected ShopInfo shopinfo;
+		// アクティビティ
+		protected ShopDetail shopdetail;
+		// 待機ダイアログ
+		protected ProgressDialog progressdialog;
+		protected int Num;
+
+		// コンストラクタ
+	    public ShopDetailTask(ShopInfo shopinfo, ShopDetail shopdetail) {
+	    	this.shopinfo = shopinfo;
+	    	this.shopdetail = shopdetail;
+	    }
+
+		@Override
+		protected void onPreExecute() {
+/*
+			// バックグラウンドの処理前にUIスレッドでダイアログ表示
+			progressdialog = new ProgressDialog(this.shopdetail);
+			progressdialog.setMessage(this.shopdetail.getResources().getText(R.string.label_dataloading));
+			progressdialog.setIndeterminate(true);
+			progressdialog.show();
+*/
+		}
+
+		// バックグラウンドで実行する処理
+	    @Override
+	    protected Integer doInBackground(Integer... params) {
+	    	this.Num = this.shopinfo.ImportData();
+	    	return(this.Num);
+	    }
+
+	    // メインスレッドで実行する処理
+	    @Override
+	    protected void onPostExecute(Integer params) {
+			// 処理中ダイアログをクローズ
+//	    	progressdialog.dismiss();
+
+			// "ShopList"画面に移行
+			this.shopdetail.closeReview(this.shopinfo);
+	    }
+	}
 }
