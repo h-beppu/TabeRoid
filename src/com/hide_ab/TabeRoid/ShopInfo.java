@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.AsyncTask;
 
 public class ShopInfo {
 	private String Rcd;
@@ -46,6 +45,7 @@ public class ShopInfo {
 	private Bitmap StarBack;
 	private Bitmap StarFront;
 	private boolean PhotoGetTask;
+	private boolean ReviewGetTask;
 
     // ベースURL
 	protected String XmlUrlBase;
@@ -77,10 +77,11 @@ public class ShopInfo {
 		this.ServiceScoreStar = null;
 		this.MoodScoreStar = null;
 		this.Photo = null;
-		this.Reviews = new ArrayList<ReviewInfo>();
+		this.Reviews = null;
 		this.StarBack  = StarBack;
 		this.StarFront = StarFront;
 		this.PhotoGetTask = false;
+		this.ReviewGetTask = false;
 	}
 
 	public boolean getPhotoGetTask() {
@@ -89,6 +90,14 @@ public class ShopInfo {
 
 	public void setPhotoGetTask(boolean Flag) {
 		this.PhotoGetTask = Flag;
+	}
+
+	public boolean getReviewGetTask() {
+		return this.ReviewGetTask;
+	}
+
+	public void setReviewGetTask(boolean Flag) {
+		this.ReviewGetTask = Flag;
 	}
 
 	public String getRcd() {
@@ -286,15 +295,21 @@ public class ShopInfo {
 		return this.Reviews;
 	}
 
-    // コメントを取得
-	protected int ImportData() {
+    // 口コミを取得
+	protected int ImportReview() {
     	int ItemNodesLen = 0;
     	
 		URL url = null;
         Document doc = null;
 
+        if(this.Reviews != null) {
+        	return(1);
+        }
+
 		try {
-            // 指定した URL の作成
+	        this.Reviews = new ArrayList<ReviewInfo>();
+
+	        // 指定した URL の作成
             String XmlUrl = XML_URL + "rcd=" + this.Rcd;
             url = new URL(XmlUrl);
             
@@ -484,7 +499,7 @@ public class ShopInfo {
         		}
 
             	// 取得した各データをreviewInfoに格納
-            	ReviewInfo reviewInfo = new ReviewInfo(this.StarBack, this.StarFront);
+        		ReviewInfo reviewInfo = new ReviewInfo(this.StarBack, this.StarFront);
             	reviewInfo.setNickName(NickName);
             	reviewInfo.setNickName(NickName);
             	reviewInfo.setVisitDate(VisitDate);

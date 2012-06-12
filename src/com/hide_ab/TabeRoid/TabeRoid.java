@@ -1,7 +1,6 @@
 package com.hide_ab.TabeRoid;
 
 import java.util.Date;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,8 +23,12 @@ public class TabeRoid extends BaseActivity implements LocationListener {
 	private LocationManager mLm;
     private String Lat = "35.70209";
     private String Lon = "139.73744";
-    private String Station = "調布";
+
     private EditText edittext_station;
+    private Button button_search_gps_large;
+    private Button button_search_gps_medium;
+    private Button button_search_gps_small;
+    private Button button_search_station;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,72 +44,85 @@ public class TabeRoid extends BaseActivity implements LocationListener {
 								BitmapFactory.decodeResource(r, R.drawable.star_front));
 
 		// GPS初期化
-        mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
-//        mLm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
+		this.mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         // 『最寄駅』エディットテキスト取得
-        edittext_station = (EditText)findViewById(R.id.edittext_station);
+		this.edittext_station = (EditText)findViewById(R.id.edittext_station);
         // 『検索』ボタン取得
-        Button button_search_gps = (Button)findViewById(R.id.button_search_gps);
-        Button button_search_station = (Button)findViewById(R.id.button_search_station);
-
-//		this.shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
+		this.button_search_gps_large  = (Button)findViewById(R.id.button_search_gps_large);
+		this.button_search_gps_medium = (Button)findViewById(R.id.button_search_gps_medium);
+		this.button_search_gps_small  = (Button)findViewById(R.id.button_search_gps_small);
+		this.button_search_station    = (Button)findViewById(R.id.button_search_station);
 
 		// 『検索』ボタンクリックハンドラ
-        button_search_gps.setOnClickListener(new View.OnClickListener() {
+		this.button_search_gps_large.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-        		// GPSの更新を停止
-        		mLm.removeUpdates(TabeRoid.this);
-
-        		// 情報はバックグラウンドで取得
-        		shopinfos.preSearch("gps", Lat, Lon, "");
-            	TabeRoidTask task = new TabeRoidTask();
-            	task.execute();
-
-            	// 検索結果の店舗情報を取得
-//        	    int ItemNum = shopinfos.ImportData("gps", Lat, Lon, "", TabeRoid.this);
-/*
-        	    // "ShopList"画面に移行
-        		Intent intent = new Intent(TabeRoid.this, ShopList.class);
-        		intent.putExtra("Key", "gps");
-    			intent.putExtra("Lat", Lat);
-    			intent.putExtra("Lon", Lon);
-        		TextView text_location = (TextView)findViewById(R.id.text_location);
-        		text_location.setText("Click");
-    			startActivityForResult(intent, 0);
-*/
+        		// 検索実行
+        		openTabeRoidTask("gps", Lat, Lon, "large", "");
         	}
         });
-
-        // 『検索』ボタンクリックハンドラ
-        button_search_station.setOnClickListener(new View.OnClickListener() {
+		this.button_search_gps_medium.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-        		// GPSの更新を停止
-        		mLm.removeUpdates(TabeRoid.this);
-
+        		// 検索実行
+        		openTabeRoidTask("gps", Lat, Lon, "medium", "");
+        	}
+        });
+		this.button_search_gps_small.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View view) {
+        		// 検索実行
+        		openTabeRoidTask("gps", Lat, Lon, "small", "");
+        	}
+        });
+		this.button_search_station.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View view) {
         		// 入力された『最寄駅』を取得
-        		Station = edittext_station.getText().toString();
-
-        		// 情報はバックグラウンドで取得
-        		shopinfos.preSearch("station", "", "", Station);
-            	TabeRoidTask task = new TabeRoidTask();
-            	task.execute();
+        		String Station = edittext_station.getText().toString();
+        		// 検索実行
+        		openTabeRoidTask("station", "", "", "", Station);
         	}
         });
     }
 
-	// "ShopList"画面に移行
-    public void openShopList() {
-		Intent intent = new Intent(TabeRoid.this, ShopList.class);
-//		intent.putExtra("Key", "station");
-//		intent.putExtra("Stations", Stations);
-//		TextView locationText = (TextView)findViewById(R.id.text_location);
-//        locationText.setText("Click");
-		startActivityForResult(intent, 0);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+		// GPS開始
+		this.mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+//      this.mLm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
+
+		// GPS検索ボタンを無効化
+		this.button_search_gps_large.setEnabled(false);
+		this.button_search_gps_medium.setEnabled(false);
+		this.button_search_gps_small.setEnabled(false);
     }
 
-	//    @Override
+	// 検索タスク実行
+    public void openTabeRoidTask(String SearchKey, String Lat, String Lon, String SearchRange, String Station) {
+		// 検索条件設定
+		shopinfos.preSearch(SearchKey, Lat, Lon, SearchRange, Station);
+		// 情報はバックグラウンドで取得
+    	TabeRoidTask task = new TabeRoidTask();
+    	task.execute();
+    }
+
+	// 検索タスク完了
+    public void closeTabeRoidTask(int Result) {
+        // 発見時
+    	if(Result > 0) {
+    		// GPSの更新を停止
+    		mLm.removeUpdates(TabeRoid.this);
+
+    		// "ShopList"画面に移行
+    		Intent intent = new Intent(TabeRoid.this, ShopList.class);
+    		startActivityForResult(intent, 0);
+    	}
+        // 非発見時
+    	else {
+            Toast.makeText(this, getResources().getText(R.string.msg_notfound), Toast.LENGTH_SHORT).show();
+    	}
+    }
+
     public void onLocationChanged(Location location) {
         TextView text_location = (TextView)findViewById(R.id.text_location);
         String str;
@@ -125,10 +141,14 @@ public class TabeRoid extends BaseActivity implements LocationListener {
         Lat = String.valueOf(location.getLatitude());
         Lon = String.valueOf(location.getLongitude());
 
+        // GPS検索ボタンを有効化
+        button_search_gps_large.setEnabled(true);
+        button_search_gps_medium.setEnabled(true);
+        button_search_gps_small.setEnabled(true);
+
         text_location.setText(str);
     }
 
-//    @Override
     public void onProviderDisabled(String provider) {
     	TextView text_provider = (TextView)findViewById(R.id.text_provider);
 
@@ -136,7 +156,6 @@ public class TabeRoid extends BaseActivity implements LocationListener {
         text_provider.setText("provider:"+provider);
     }
 
-//    @Override
     public void onProviderEnabled(String provider) {
         TextView text_provider = (TextView)findViewById(R.id.text_provider);
 
@@ -144,12 +163,11 @@ public class TabeRoid extends BaseActivity implements LocationListener {
         text_provider.setText("provider:"+provider);
     }
 
-//    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-//        TextView text_provider = (TextView)findViewById(R.id.text_provider);
+//      TextView text_provider = (TextView)findViewById(R.id.text_provider);
         TextView text_status = (TextView)findViewById(R.id.text_status);
 
-        //Toast.makeText(this, "onStatusChanged()", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this, "onStatusChanged()", Toast.LENGTH_SHORT).show();
 
         text_status.setText("provider:"+provider);
         switch (status) {
@@ -168,14 +186,8 @@ public class TabeRoid extends BaseActivity implements LocationListener {
     //
     // バックグラウンドタスク
     //
-	class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
+	class TabeRoidTask extends AsyncTask<Integer, Void, Integer> {
 		protected ProgressDialog progressdialog;
-		protected int Num;
-
-		// コンストラクタ
-	    public TabeRoidTask() {
-			this.Num = 0;
-	    }
 
 		@Override
 		protected void onPreExecute() {
@@ -189,21 +201,21 @@ public class TabeRoid extends BaseActivity implements LocationListener {
 		// バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
-	    	this.Num = shopinfos.ImportData();
-	    	return(this.Num);
+	    	int Result = shopinfos.ImportData();
+	    	return(Result);
 	    }
 
 	    // メインスレッドで実行する処理
 	    @Override
-	    protected void onPostExecute(Integer params) {
+	    protected void onPostExecute(Integer Result) {
 			// 処理中ダイアログをクローズ
 	    	this.progressdialog.dismiss();
 
 	    	TextView text_location = (TextView)findViewById(R.id.text_location);
-	    	text_location.setText("Click" + this.Num);
+	    	text_location.setText("Click" + Result);
 
-			// "ShopList"画面に移行
-			openShopList();
+			// タスク完了
+	    	closeTabeRoidTask(Result);
 	    }
 	}
 }

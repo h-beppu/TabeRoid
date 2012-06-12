@@ -28,12 +28,31 @@
 	    android:layout_height="wrap_content"
 	    android:textColor="@color/text1_color"
 	    android:text="@string/label_search_gps" />
-	<Button
-		android:id="@+id/button_search_gps"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/button_search"
-    	android:layout_gravity="center" />
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+		android:layout_height="?android:attr/listPreferredItemHeight"
+    	android:padding="6dip"
+    	android:layout_gravity="center"
+    	android:gravity="center">
+		<Button
+			android:id="@+id/button_search_gps_small"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/button_small"
+	    	android:layout_gravity="center" />
+		<Button
+			android:id="@+id/button_search_gps_medium"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/button_medium"
+	    	android:layout_gravity="center" />
+		<Button
+			android:id="@+id/button_search_gps_large"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/button_large"
+	    	android:layout_gravity="center" />
+	</LinearLayout>
 	<TextView
 	    android:id="@+id/text_location"
 	    android:layout_width="fill_parent"

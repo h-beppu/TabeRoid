@@ -2,14 +2,20 @@
 <resources>
     <string name="app_name">食べRoid</string>
     <string name="api_key">96d24714e814675c7a8cd129c18608151cf2bf9b</string>
+    <string name="button_large">1.5km</string>
+    <string name="button_medium">600m</string>
+    <string name="button_small">300m</string>
     <string name="button_search">検索</string>
+
+    <string name="msg_notfound">条件に合致するお店はありませんでした</string>
+
     <string name="button_share_map">地図で見る</string>
     <string name="button_review_more">(続きを読む...)</string>
     <string name="label_search_gps">現在の位置情報で検索</string>
     <string name="label_search_station">最寄駅で検索</string>
     <string name="label_result">検索結果</string>
     <string name="label_footer">続きを見る</string>
-    <string name="label_dataloading">DataLoading...</string>
+    <string name="label_dataloading">データ取得中</string>
     <string name="label_restaurantname">店名</string>
     <string name="label_tabelogurl">URL</string>
     <string name="label_tabelogmobileurl">携帯URL</string>

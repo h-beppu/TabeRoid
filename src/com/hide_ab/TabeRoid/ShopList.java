@@ -2,11 +2,8 @@ package com.hide_ab.TabeRoid;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -72,25 +69,31 @@ public class ShopList extends BaseActivity {
 	}
 
 	// 追加読み込み完了
-    public void closeMore(int Num) {
+    public void closeShopListTask(int Result) {
     	try {
 			ListView listview_results = (ListView)findViewById(R.id.listview_results);
 
-			if(Num <= 0) {
+			if(Result <= 0) {
     			// listview_resultsからフッターを削除
     			listview_results.removeFooterView(this.FooterView);
     		}
 
     		// 再描画
     		listview_results.invalidateViews();
-    		shoplistadapter.notifyDataSetChanged();
+    		this.shoplistadapter.notifyDataSetChanged();
         } catch (Exception e) {
-			showDialog(this, "", "Error1."+e.getMessage());
+			showDialog(this, "", "Error1." + e.getMessage());
         }
     }
 
-    //
-    //
+	// 写真取得完了
+    public void closePhotoGetTask() {
+    	// 結果表示を再描画
+    	this.shoplistadapter.notifyDataSetChanged();
+    }
+
+	//
+    // リストアダプタ
     //
 	class ShopListAdapter extends ArrayAdapter<ShopInfo> {
 		private ArrayList<ShopInfo> List;
@@ -163,14 +166,8 @@ public class ShopList extends BaseActivity {
 	//
     // バックグラウンドタスク
 	//
-	class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
+	class ShopListTask extends AsyncTask<Integer, Void, Integer> {
 		protected ProgressDialog progressdialog;
-		protected int Num;
-
-		// コンストラクタ
-	    public ShopListTask() {
-	    	this.Num = 0;
-	    }
 
 		@Override
 		protected void onPreExecute() {
@@ -184,47 +181,49 @@ public class ShopList extends BaseActivity {
 		// バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
-	    	this.Num = shopinfos.ImportData();
-	    	return(this.Num);
+	    	int Result = shopinfos.ImportData();
+	    	return(Result);
 	    }
 
 	    // メインスレッドで実行する処理
 	    @Override  
-	    protected void onPostExecute(Integer params) {
+	    protected void onPostExecute(Integer Result) {
 			// 処理中ダイアログをクローズ
 	    	this.progressdialog.dismiss();
 
-	    	// 追加読み込み完了
-			closeMore(this.Num);
+	    	// タスク完了
+			closeShopListTask(Result);
 	    }
 	}
 
 	//
     // バックグラウンドタスク
 	//
-	class PhotoGetTask extends AsyncTask<String, Void, Bitmap> {
+	class PhotoGetTask extends AsyncTask<String, Void, Integer> {
 		private ShopInfo shopinfo;
 
 		// コンストラクタ
 	    public PhotoGetTask(ShopInfo shopinfo) {
 	    	this.shopinfo = shopinfo;
-	    	// 写真取得タスク稼働中
-	    	this.shopinfo.setPhotoGetTask(true);
 	    }
 
 	    // バックグラウンドで実行する処理
 	    @Override
-	    protected Bitmap doInBackground(String... params) {
-	    	return(this.shopinfo.ImportPhoto());
+	    protected Integer doInBackground(String... params) {
+	    	// 写真取得タスク稼働中
+	    	this.shopinfo.setPhotoGetTask(true);
+	    	// 画像取得
+	    	this.shopinfo.ImportPhoto();
+	    	return(1);
 	    }
 
 	    // メインスレッドで実行する処理  
-	    @Override  
-	    protected void onPostExecute(Bitmap result) {
-	        // 結果表示を再描画
-	    	ShopList.this.shoplistadapter.notifyDataSetChanged();
+	    @Override
+	    protected void onPostExecute(Integer Result) {
 	    	// 写真取得タスク稼働完了
 	    	this.shopinfo.setPhotoGetTask(false);
+	    	// タスク完了
+			closePhotoGetTask();
 	    }
 	}
 }

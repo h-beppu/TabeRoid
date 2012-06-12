@@ -12,12 +12,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.widget.TextView;
 
 public class ShopInfos extends Application {
 	// 表示するデータのリスト
@@ -37,6 +33,7 @@ public class ShopInfos extends Application {
 	protected String SearchKey;
 	protected String Lat;
 	protected String Lon;
+	protected String SearchRange;
 	protected String Station;
 
 	// デフォルト写真
@@ -85,10 +82,11 @@ public class ShopInfos extends Application {
 	}
 
 	// 検索前準備処理(結果格納バッファのクリア＆検索条件設定)
-	public void preSearch(String SearchKey, String Lat, String Lon, String Station) {
+	public void preSearch(String SearchKey, String Lat, String Lon, String SearchRange, String Station) {
 		this.SearchKey = SearchKey;
 		this.Lat = Lat;
 		this.Lon = Lon;
+		this.SearchRange = SearchRange;
 		this.Station = Station;
 
 		// リスト初期化
@@ -99,7 +97,7 @@ public class ShopInfos extends Application {
 
 		// ベースURLを初期化
         if(this.SearchKey.equals("gps")) {
-           	this.XmlUrlBase = XML_URL + "Datum=world&Latitude=" + this.Lat + "&Longitude=" + this.Lon;
+           	this.XmlUrlBase = XML_URL + "Datum=world&Latitude=" + this.Lat + "&Longitude=" + this.Lon + "&SearchRange=" + this.SearchRange;
         } else {
            	this.XmlUrlBase = XML_URL + "Station=" + URLEncoder.encode(this.Station);
         }

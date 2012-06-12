@@ -3,11 +3,10 @@ package com.hide_ab.TabeRoid;
 import java.util.ArrayList;
 
 import android.app.ProgressDialog;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,9 +24,10 @@ import android.widget.TextView;
 public class ShopDetail extends BaseActivity {
 	// ListAdapter
 	private ShopDetailAdapter shopdetailadapter = null;
+	protected int position;
 	protected String Lat;
 	protected String Lon;
-	protected int position;
+	protected Resources r;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -35,7 +35,9 @@ public class ShopDetail extends BaseActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.shop_detail);
 
-	    // 画面構成を適用
+		this.r = getResources();
+
+		// 画面構成を適用
         // TabHostオブジェクト取得   
         TabHost tabHost = (TabHost)findViewById(android.R.id.tabhost);       
         tabHost.setup();   
@@ -50,29 +52,15 @@ public class ShopDetail extends BaseActivity {
         ImageView image_navi1 = (ImageView)findViewById(R.id.image_navi1);
         image_navi1.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-        		// データポインタを前に
-        		position--;
-				if(--position < 0) {
-					position = 0;
-				}
-				else {
-			        // 指定データの表示
-			        MakeView();
-				}
+			    // 前のデータの表示
+			    MakeView(-1);
         	}
         });
         ImageView image_navi2 = (ImageView)findViewById(R.id.image_navi2);
         image_navi2.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-        		// データポインタを次に
-				position++;
-				if(position > shopinfos.getNumOfItem() - 1) {
-					position = shopinfos.getNumOfItem() - 1;
-				}
-				else {
-					// 指定データの表示
-			        MakeView();
-				}
+				// 次のデータの表示
+			    MakeView(1);
         	}
         });
 
@@ -80,16 +68,35 @@ public class ShopDetail extends BaseActivity {
         Intent intent = getIntent();
         this.position = intent.getIntExtra("Position", 0);
 
-        // 指定データの表示
-        this.MakeView();
+        // データの表示
+        this.MakeView(0);
 	}
 
 	// 指定データの表示
-	private void MakeView() {
-        ShopInfo shopInfo = this.shopinfos.getInfo(this.position);
+	private void MakeView(int vector) {
+		// データポインタを前に
+		if(vector < 0) {
+			this.position--;
+			if(this.position < 0) {
+				this.position = 0;
+				return;
+			}
+		}
+		// データポインタを次に
+		else if(vector > 0) {
+			this.position++;
+			if(this.position > shopinfos.getNumOfItem() - 1) {
+				this.position = shopinfos.getNumOfItem() - 1;
+				return;
+			}
+		}
+
+		ShopInfo shopInfo = this.shopinfos.getInfo(this.position);
 
         TextView tvRestaurantName = (TextView)findViewById(R.id.RestaurantName);
         tvRestaurantName.setText(shopInfo.getRestaurantName());
+        TextView tvRestaurantName2 = (TextView)findViewById(R.id.RestaurantName2);
+        tvRestaurantName2.setText(shopInfo.getRestaurantName());
 /*
         TextView tvTabelogUrl = (TextView)findViewById(R.id.TabelogUrl);
         tvTabelogUrl.setText(shopInfo.getTabelogUrl());
@@ -159,23 +166,26 @@ public class ShopDetail extends BaseActivity {
         TextView tvLatLon = (TextView)findViewById(R.id.LatLon);
         tvLatLon.setText(shopInfo.getLat() + " " + shopInfo.getLon());
 
+		ImageView ivPhoto1 = (ImageView)findViewById(R.id.Photo);
+		ImageView ivPhoto2 = (ImageView)findViewById(R.id.Photo2);
         if(shopInfo.getPhoto() != null) {
-			ImageView ivPhoto = (ImageView)findViewById(R.id.Photo);
-			ivPhoto.setImageBitmap(shopInfo.getPhoto());
-		}
-
-        //
-        TextView tvRestaurantName2 = (TextView)findViewById(R.id.RestaurantName2);
-        tvRestaurantName2.setText(shopInfo.getRestaurantName());
-
-        if(shopInfo.getPhoto() != null) {
-			ImageView ivPhoto2 = (ImageView)findViewById(R.id.Photo2);
+			ivPhoto1.setImageBitmap(shopInfo.getPhoto());
 			ivPhoto2.setImageBitmap(shopInfo.getPhoto());
 		}
+        else {
+			ivPhoto1.setImageBitmap(BitmapFactory.decodeResource(this.r, R.drawable.icon));
+			ivPhoto2.setImageBitmap(BitmapFactory.decodeResource(this.r, R.drawable.icon));
+        }
 
-        // コメントを取得
-    	ShopDetailTask task = new ShopDetailTask(shopInfo);
-    	task.execute();
+        // 口コミを一旦クリア
+        closeReviewGetTask(null);
+
+    	// 口コミ取得タスクが走っていなければ
+		if(!shopInfo.getReviewGetTask()) {
+			// バックグラウンドで口コミを取得
+			ReviewGetTask task = new ReviewGetTask(shopInfo);
+			task.execute();
+		}
 
         this.Lat = shopInfo.getLat();
         this.Lon = shopInfo.getLon();
@@ -192,10 +202,21 @@ public class ShopDetail extends BaseActivity {
         });
 	}
 	
-    // コメント取得完了
-    public void closeReview(ShopInfo shopinfo) {
-    	// ListからShopDetailAdapterを生成
-	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopinfo.getReviews());
+    // 口コミ取得完了
+    public void closeReviewGetTask(ShopInfo shopinfo) {
+    	if(shopinfo != null) {
+    		ShopInfo shopInfo = this.shopinfos.getInfo(this.position);
+    		// 表示中のデータでなければ無処理
+    		if(shopInfo.getRcd() != shopinfo.getRcd()) {
+    			return;
+    		}
+    		// ListからShopDetailAdapterを生成
+    		this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopinfo.getReviews());
+    	}
+    	else {
+    		// クリア
+    	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, new ArrayList<ReviewInfo>());
+    	}
     	// ShopDetailAdapterをShopDetail.xml内にあるlistview_reviewsに渡して内容を表示する
     	ListView listview_reviews = (ListView)findViewById(R.id.listview_reviews);
     	// listview_reviewsにshopdetailadapterをセット
@@ -203,7 +224,7 @@ public class ShopDetail extends BaseActivity {
     }
 
     //
-    //
+    // リストアダプタ
     //
 	class ShopDetailAdapter extends ArrayAdapter<ReviewInfo> {
 		private ArrayList<ReviewInfo> List;
@@ -351,46 +372,32 @@ public class ShopDetail extends BaseActivity {
 	}
 
 	//
+    // バックグラウンドタスク
 	//
-	//
-	class ShopDetailTask extends AsyncTask<Integer, Integer, Integer> {
-		// 店舗データオブジェクト
-		protected ShopInfo shopinfo;
-		// 待機ダイアログ
-		protected ProgressDialog progressdialog;
-		protected int Num;
+	class ReviewGetTask extends AsyncTask<Integer, Void, Integer> {
+		private ShopInfo shopinfo;
 
 		// コンストラクタ
-	    public ShopDetailTask(ShopInfo shopinfo) {
+	    public ReviewGetTask(ShopInfo shopinfo) {
 	    	this.shopinfo = shopinfo;
 	    }
-
-		@Override
-		protected void onPreExecute() {
-/*
-			// バックグラウンドの処理前にUIスレッドでダイアログ表示
-			progressdialog = new ProgressDialog(this.shopdetail);
-			progressdialog.setMessage(this.shopdetail.getResources().getText(R.string.label_dataloading));
-			progressdialog.setIndeterminate(true);
-			progressdialog.show();
-*/
-		}
 
 		// バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
-	    	this.Num = this.shopinfo.ImportData();
-	    	return(this.Num);
+	    	// 口コミ取得タスク稼働中
+	    	this.shopinfo.setReviewGetTask(true);
+	    	int Result = this.shopinfo.ImportReview();
+	    	return(Result);
 	    }
 
 	    // メインスレッドで実行する処理
 	    @Override
-	    protected void onPostExecute(Integer params) {
-			// 処理中ダイアログをクローズ
-//	    	progressdialog.dismiss();
-
-			// "ShopList"画面に移行
-			closeReview(this.shopinfo);
+	    protected void onPostExecute(Integer Result) {
+	    	// 写真取得タスク稼働完了
+	    	this.shopinfo.setReviewGetTask(false);
+	    	// タスク完了
+			closeReviewGetTask(this.shopinfo);
 	    }
 	}
 }
