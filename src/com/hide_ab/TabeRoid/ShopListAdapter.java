@@ -58,14 +58,7 @@ public class ShopListAdapter extends ArrayAdapter {
 
 			ImageView image_photo = (ImageView)view.findViewById(R.id.image_photo);
 			if(image_photo != null) {
-				if(shopInfo.getPhoto() == null) {
-	 				// バックグラウンドで画像取得   
-	 				ImageDrawer imagedrawer = new ImageDrawer(shopInfo);   
-	 				imagedrawer.execute(shopInfo.getRcd());
-				}
-				else {
-					image_photo.setImageBitmap(shopInfo.getPhoto());
-				}
+				image_photo.setImageBitmap(shopInfo.getPhoto());
 			}
 		}
 		return view;

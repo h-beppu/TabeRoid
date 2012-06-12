@@ -1,6 +1,7 @@
 package com.hide_ab.TabeRoid;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,31 +11,51 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.widget.ImageView;
 import android.os.AsyncTask;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class ImageDrawer extends AsyncTask<String, Integer, Bitmap> {
-	// アイコンを表示するビュー   
-	private ShopInfo shopInfo;   
+public class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
+	// 検索結果店舗データオブジェクト
+	protected ShopInfos shopinfos;
+	// 結果表示のListAdapter
+	private ShopListAdapter shoplistadapter;
 
 	// コンストラクタ
-    public ImageDrawer(ShopInfo shopInfoP) {
-    	this.shopInfo = shopInfoP;
+    public ImageDrawer(ShopInfos shopinfosP, ShopListAdapter shoplistadapterP) {
+    	this.shopinfos = shopinfosP;
+    	this.shoplistadapter = shoplistadapterP;
     }
 
     // バックグラウンドで実行する処理   
     @Override
-    protected Bitmap doInBackground(String... params) {
-        String Rcd = params[0];
-        return ImportPhoto(Rcd);
+    protected Integer doInBackground(Integer... params) {
+    	ShopInfo shopinfo;
+    	Bitmap bitmap;
+    	
+    	ArrayList<ShopInfo> List = this.shopinfos.getList();
+        for(int i = 0; i < List.size(); i++) {
+            // 画像の取得
+            shopinfo = List.get(i);
+            bitmap = ImportPhoto(shopinfo.getRcd());
+            shopinfo.setPhoto(bitmap);
+
+        	publishProgress(0);
+        }
+        return(0);
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... progress) {
+        // 結果表示を再描画
+    	this.shoplistadapter.notifyDataSetChanged();
     }
 
     // メインスレッドで実行する処理   
     @Override  
-    protected void onPostExecute(Bitmap result) {   
-    	this.shopInfo.setPhoto(result);   
+    protected void onPostExecute(Integer params) {   
+        // 結果表示を再描画
+    	this.shoplistadapter.notifyDataSetChanged();
     }   
 
     // 画像の取得

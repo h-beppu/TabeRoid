@@ -118,7 +118,7 @@ public class TabeRoid extends Activity implements LocationListener {
 
 //    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        TextView text_provider = (TextView)findViewById(R.id.text_provider);
+//        TextView text_provider = (TextView)findViewById(R.id.text_provider);
         TextView text_status = (TextView)findViewById(R.id.text_status);
 
         //Toast.makeText(this, "onStatusChanged()", Toast.LENGTH_SHORT).show();
