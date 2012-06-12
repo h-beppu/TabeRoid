@@ -3,6 +3,7 @@
     <string name="app_name">食べRoid</string>
     <string name="api_key">96d24714e814675c7a8cd129c18608151cf2bf9b</string>
     <string name="button_search">検索</string>
+    <string name="button_share_map">地図で見る</string>
     <string name="label_search_gps">現在の位置情報で検索</string>
     <string name="label_search_station">最寄駅で検索</string>
     <string name="label_result">検索結果</string>

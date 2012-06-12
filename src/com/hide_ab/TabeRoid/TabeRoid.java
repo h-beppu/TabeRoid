@@ -34,7 +34,7 @@ public class TabeRoid extends Activity implements LocationListener {
 
 		// 検索結果店舗データオブジェクト生成
 	    this.shopinfos = (ShopInfos)this.getApplication();
-
+	    
 	    // GPS初期化
         mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);

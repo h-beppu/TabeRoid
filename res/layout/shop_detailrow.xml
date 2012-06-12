@@ -12,7 +12,7 @@
         android:layout_height="0dip"
 		android:layout_weight="1"
         android:textColor="@color/text1_color"
-        android:gravity="center_vertical"/>*>
+        android:gravity="center_vertical"/>
     <TextView
 		android:id="@+id/VisitDate"
 		android:layout_width="fill_parent"

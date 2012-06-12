@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +17,8 @@ public class ShopDetail extends Activity {
 	protected ShopInfos shopinfos;
 	// ListAdapter
 	private ShopDetailAdapter shopdetailadapter = null;
+	protected String Lat;
+	protected String Lon;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -91,6 +96,20 @@ public class ShopDetail extends Activity {
         // コメントを取得
     	ShopDetailTask task = new ShopDetailTask(shopInfo, ShopDetail.this);
     	task.execute();
+
+        this.Lat = shopInfo.getLat();
+        this.Lon = shopInfo.getLon();
+
+        // 『地図で見る』ボタン取得
+        Button button_share_map = (Button)findViewById(R.id.button_share_map);
+
+        // 『地図で見る』ボタンクリックハンドラ
+        button_share_map.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View view) {
+        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + Lat + "," + Lon + "?z=18"));
+        		startActivity(intent);
+        	}
+        });
 	}
 
     // コメント取得完了

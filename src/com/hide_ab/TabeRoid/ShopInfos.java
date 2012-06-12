@@ -20,7 +20,9 @@ public class ShopInfos extends Application {
 	protected ArrayList<ShopInfo> List = null;
 	// ページ位置
 	protected int PageNum;
-    // ベースURL
+    // 検索結果件数
+	protected int NumOfResult;
+	// ベースURL
 	protected String XmlUrlBase;
 	// API URL
 	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&ResultSet=large&";
@@ -50,6 +52,10 @@ public class ShopInfos extends Application {
 
 	public void putInfo(ShopInfo shopInfo) {
 		this.List.add(shopInfo);
+	}
+
+	public int NumOfResult() {
+		return(this.NumOfResult);
 	}
 
 	public void preSearch(String SearchKey, String Lat, String Lon, String Station) {
@@ -94,6 +100,17 @@ public class ShopInfos extends Application {
             Element TmpNode, TmpNode2;
             NodeList TmpNodes;
             int TmpNodesLen;
+
+            // 検索結果件数
+            NodeList NumNodes = root.getElementsByTagName("NumOfResult");
+            int NumNodesLen = NumNodes.getLength();
+        	if(NumNodesLen > 0) {
+        		TmpNode2 = (Element)NumNodes.item(0);
+        		Node ell = (Node)TmpNode2.getFirstChild();
+        		if(ell != null) {
+        			this.NumOfResult = Integer.parseInt(ell.getNodeValue());
+        		}
+        	}
 
             // リスト作成
             NodeList ItemNodes = root.getElementsByTagName("Item");

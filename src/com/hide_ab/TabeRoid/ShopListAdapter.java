@@ -35,23 +35,22 @@ public class ShopListAdapter extends ArrayAdapter<ShopInfo> {
 		ShopInfo shopInfo = (ShopInfo)List.get(position);
 		if(shopInfo != null) {
 			// スクリーンネームをビューにセット
-			TextView tvDate = (TextView)view.findViewById(R.id.text1);
-			tvDate.setTypeface(Typeface.DEFAULT_BOLD);
-			if(tvDate != null) {
-				tvDate.setText(shopInfo.getRestaurantName());
+			TextView tvRestaurantName = (TextView)view.findViewById(R.id.RestaurantName);
+			if(tvRestaurantName != null) {
+				tvRestaurantName.setText(shopInfo.getRestaurantName());
 			}
 
-			TextView tvJyoName = (TextView)view.findViewById(R.id.text2);
-			if(tvJyoName != null) {
-				tvJyoName.setText(shopInfo.getTotalScore());
+			TextView tvTotalScore = (TextView)view.findViewById(R.id.TotalScore);
+			if(tvTotalScore != null) {
+				tvTotalScore.setText(shopInfo.getTotalScore());
 			}
 
-			TextView tvCategory = (TextView)view.findViewById(R.id.text3);
+			TextView tvCategory = (TextView)view.findViewById(R.id.Category);
 			if(tvCategory != null) {
 				tvCategory.setText(shopInfo.getCategory());
 			}
 
-			TextView tvStation = (TextView)view.findViewById(R.id.text4);
+			TextView tvStation = (TextView)view.findViewById(R.id.Station);
 			if(tvStation != null) {
 				tvStation.setText(shopInfo.getStation());
 			}

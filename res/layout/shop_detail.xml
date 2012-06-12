@@ -210,6 +210,16 @@
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
 		</TableRow>
+		<TableRow
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<Button
+				android:id="@+id/button_share_map"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/button_share_map"
+		    	android:layout_gravity="center" />
+		</TableRow>
 	</TableLayout>
 	<ListView
 		android:id="@+id/listview_reviews" 
