@@ -62,15 +62,19 @@ public class ShopDetail extends Activity {
 		}
 
         // コメントを取得
-        int ItemNum = shopInfo.ImportData();
+    	ShopDetailTask task = new ShopDetailTask(shopInfo, ShopDetail.this);
+    	task.execute();
+	}
 
-	    // ListからShopDetailAdapterを生成
-	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopInfo.getComments());
+    // コメント取得完了
+    public void closeComment(ShopInfo shopinfo) {
+    	// ListからShopDetailAdapterを生成
+	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopinfo.getComments());
     	// ShopDetailAdapterをShopDetail.xml内にあるlistview_commentsに渡して内容を表示する
     	ListView listview_comments = (ListView)findViewById(R.id.listview_comments);
     	// listview_commentにshopdetailadapterをセット
     	listview_comments.setAdapter(shopdetailadapter);
-	}
+    }
 
 	// ダイアログの表示
     protected void showDialog(final Activity activity, String title, String text) {

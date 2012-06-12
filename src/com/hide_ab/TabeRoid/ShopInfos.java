@@ -25,6 +25,12 @@ public class ShopInfos extends Application {
 	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&";
 //	protected static final String XML_URL_D = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&Datum=world&Latitude=35.726&Longitude=139.988";
 
+	protected TabeRoid taberoid;
+	protected String SearchKey;
+	protected String Lat;
+	protected String Lon;
+	protected String Station;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -43,8 +49,12 @@ public class ShopInfos extends Application {
 		this.List.add(shopInfo);
 	}
 
-    // 検索結果の店舗情報を取得
-	protected int ImportData(String SearchKey, String Lat, String Lon, String Stations) {
+	public void preSearch(String SearchKey, String Lat, String Lon, String Station) {
+		this.SearchKey = SearchKey;
+		this.Lat = Lat;
+		this.Lon = Lon;
+		this.Station = Station;
+
 		// リスト初期化
 		this.List.clear();
 	
@@ -52,16 +62,13 @@ public class ShopInfos extends Application {
 		this.PageNum = 0;
 
 		// ベースURLを初期化
-        if(SearchKey.equals("gps")) {
-           	this.XmlUrlBase = XML_URL + "Datum=world&Latitude=" + Lat + "&Longitude=" + Lon;
+        if(this.SearchKey.equals("gps")) {
+           	this.XmlUrlBase = XML_URL + "Datum=world&Latitude=" + this.Lat + "&Longitude=" + this.Lon;
         } else {
-           	this.XmlUrlBase = XML_URL + "Station=" + URLEncoder.encode(Stations);
+           	this.XmlUrlBase = XML_URL + "Station=" + URLEncoder.encode(this.Station);
         }
-
-    	// 検索結果の店舗情報を取得
-        return(this.ImportData());
 	}
-
+	
 	// 検索結果の店舗情報を取得
 	protected int ImportData() {
     	int ItemNodesLen = 0;
@@ -69,9 +76,9 @@ public class ShopInfos extends Application {
         // ページをインクリメント
         this.PageNum++;
 
-        try {
+    	try {
             // 指定した URL の作成
-        	URL url = new URL(this.XmlUrlBase + "&PageNum=" + this.PageNum);
+            URL url = new URL(this.XmlUrlBase + "&PageNum=" + this.PageNum);
 
             // ドキュメントビルダーの生成
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -176,7 +183,6 @@ public class ShopInfos extends Application {
         	e.printStackTrace();
         	return(-1);
         }
-
         return(ItemNodesLen);
 	}
 }

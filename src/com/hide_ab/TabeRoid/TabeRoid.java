@@ -16,11 +16,13 @@ import android.widget.TextView;
 import android.widget.EditText;
 
 public class TabeRoid extends Activity implements LocationListener {
-//public class TabeRoid extends Activity {
-    private LocationManager mLm;
+	// 検索結果店舗データオブジェクト
+	protected ShopInfos shopinfos;
+	// 検索条件
+	private LocationManager mLm;
     private String Lat = "35.70209";
     private String Lon = "139.73744";
-    private String Stations = "調布";
+    private String Station = "調布";
     private EditText edittext_station;
 
     @Override
@@ -30,7 +32,10 @@ public class TabeRoid extends Activity implements LocationListener {
         // 画面構成を適用
         setContentView(R.layout.taberoid);
 
-        // GPS初期化
+		// 検索結果店舗データオブジェクト生成
+	    this.shopinfos = (ShopInfos)this.getApplication();
+
+	    // GPS初期化
         mLm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         mLm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
 //        mLm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
@@ -47,7 +52,15 @@ public class TabeRoid extends Activity implements LocationListener {
         		// GPSの更新を停止
         		mLm.removeUpdates(TabeRoid.this);
 
-        		// "ShopList"画面に移行
+        		// 情報はバックグラウンドで取得
+        		shopinfos.preSearch("gps", Lat, Lon, "");
+            	TabeRoidTask task = new TabeRoidTask(shopinfos, TabeRoid.this);
+            	task.execute();
+
+            	// 検索結果の店舗情報を取得
+//        	    int ItemNum = shopinfos.ImportData("gps", Lat, Lon, "", TabeRoid.this);
+/*
+        	    // "ShopList"画面に移行
         		Intent intent = new Intent(TabeRoid.this, ShopList.class);
         		intent.putExtra("Key", "gps");
     			intent.putExtra("Lat", Lat);
@@ -55,6 +68,7 @@ public class TabeRoid extends Activity implements LocationListener {
         		TextView text_location = (TextView)findViewById(R.id.text_location);
         		text_location.setText("Click");
     			startActivityForResult(intent, 0);
+*/
         	}
         });
 
@@ -65,20 +79,27 @@ public class TabeRoid extends Activity implements LocationListener {
         		mLm.removeUpdates(TabeRoid.this);
 
         		// 入力された『最寄駅』を取得
-        		Stations = edittext_station.getText().toString();
-        		
-        		// "ShopList"画面に移行
-        		Intent intent = new Intent(TabeRoid.this, ShopList.class);
-        		intent.putExtra("Key", "station");
-    			intent.putExtra("Stations", Stations);
-        		TextView locationText = (TextView)findViewById(R.id.text_location);
-                locationText.setText("Click");
-    			startActivityForResult(intent, 0);
+        		Station = edittext_station.getText().toString();
+
+        		// 情報はバックグラウンドで取得
+        		shopinfos.preSearch("station", "", "", Station);
+            	TabeRoidTask task = new TabeRoidTask(shopinfos, TabeRoid.this);
+            	task.execute();
         	}
         });
     }
 
-//    @Override
+	// "ShopList"画面に移行
+    public void openShopList() {
+		Intent intent = new Intent(TabeRoid.this, ShopList.class);
+//		intent.putExtra("Key", "station");
+//		intent.putExtra("Stations", Stations);
+//		TextView locationText = (TextView)findViewById(R.id.text_location);
+//        locationText.setText("Click");
+		startActivityForResult(intent, 0);
+    }
+
+	//    @Override
     public void onLocationChanged(Location location) {
         TextView text_location = (TextView)findViewById(R.id.text_location);
         String str;
