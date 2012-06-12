@@ -4,7 +4,7 @@
     <string name="api_key">96d24714e814675c7a8cd129c18608151cf2bf9b</string>
     <string name="button_search">検索</string>
     <string name="button_share_map">地図で見る</string>
-    <string name="button_review_more">続きを読む</string>
+    <string name="button_review_more">(続きを読む...)</string>
     <string name="label_search_gps">現在の位置情報で検索</string>
     <string name="label_search_station">最寄駅で検索</string>
     <string name="label_result">検索結果</string>
@@ -40,8 +40,8 @@
     <string name="label_rv_tastescore">料理・味の点数</string>
     <string name="label_rv_servicescore">サービスの点数</string>
     <string name="label_rv_moodscore">雰囲気の点数</string>
-    <string name="label_rv_dinnerprice">使った金額/1人当り(夜)</string>
-    <string name="label_rv_lunchprice">使った金額/1人当り(昼)</string>
+    <string name="label_rv_dinnerprice">使った金額/人(夜)</string>
+    <string name="label_rv_lunchprice">使った金額/人(昼)</string>
     <string name="label_rv_title">口コミのタイトル</string>
     <string name="label_rv_comment">口コミのコメント</string>
     <string name="label_rv_pcsiteurl">口コミページ(PC)のURL</string>
@@ -53,4 +53,5 @@
     <color name="row_bgcolor">#FFFFFF</color>
     <color name="text1_color">#000000</color>
     <color name="text2_color">#202020</color>
+    <color name="text3_color">#0000FF</color>
 </resources>

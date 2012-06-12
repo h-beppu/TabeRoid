@@ -53,7 +53,7 @@ public class ShopList extends Activity {
     	listview_results.setAdapter(this.shoplistadapter);
     	
 		// 画像はバックグラウンドで取得
-		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);
+		ImageDrawer imagedrawer = new ImageDrawer();
 		imagedrawer.execute();
 
     	// listview_resultsにOnItemClickListenerを設定
@@ -62,7 +62,7 @@ public class ShopList extends Activity {
 	    		// フッタをクリックされた場合
 	    		if(view.getId() == R.id.Footer) {
 	    		    // 検索結果の店舗情報を取得(追加分)
-	            	ShopListTask task = new ShopListTask(shopinfos, ShopList.this);
+	            	ShopListTask task = new ShopListTask();
 	            	task.execute();
 	    		}
 	    		// フッタ以外(店舗情報)をクリックされた場合
@@ -83,7 +83,7 @@ public class ShopList extends Activity {
     public void closeMore(int Num) {
     	try {
     		// 画像はバックグラウンドで取得
-    		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);   
+    		ImageDrawer imagedrawer = new ImageDrawer();   
     		imagedrawer.execute();
 
 			ListView listview_results = (ListView)findViewById(R.id.listview_results);
@@ -180,15 +180,9 @@ public class ShopList extends Activity {
     //
     //
 	class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
-		// 検索結果店舗データオブジェクト
-		protected ShopInfos shopinfos;
-		// 結果表示のListAdapter
-		private ShopListAdapter shoplistadapter;
-
 		// コンストラクタ
-	    public ImageDrawer(ShopInfos shopinfosP, ShopListAdapter shoplistadapterP) {
-	    	this.shopinfos = shopinfosP;
-	    	this.shoplistadapter = shoplistadapterP;
+	    public ImageDrawer() {
+	    	;
 	    }
 
 	    // バックグラウンドで実行する処理
@@ -197,7 +191,7 @@ public class ShopList extends Activity {
 	    	ShopInfo shopinfo;
 	    	Bitmap Photo;
 
-	    	ArrayList<ShopInfo> List = this.shopinfos.getList();
+	    	ArrayList<ShopInfo> List = shopinfos.getList();
 	        for(int i = 0; i < List.size(); i++) {
 	            shopinfo = List.get(i);
 	            // 画像が未取得なら
@@ -216,14 +210,14 @@ public class ShopList extends Activity {
 	    @Override
 	    protected void onProgressUpdate(Integer... progress) {
 	        // 結果表示を再描画
-	    	this.shoplistadapter.notifyDataSetChanged();
+	    	shoplistadapter.notifyDataSetChanged();
 	    }
 
 	    // メインスレッドで実行する処理  
 	    @Override  
 	    protected void onPostExecute(Integer params) {
 	        // 結果表示を再描画
-	    	this.shoplistadapter.notifyDataSetChanged();
+	    	shoplistadapter.notifyDataSetChanged();
 	    }
 	}
 
@@ -231,24 +225,19 @@ public class ShopList extends Activity {
 	//
 	//
 	class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
-		// 検索結果店舗データオブジェクト
-		protected ShopInfos shopinfos;
-		// アクティビティ
-		protected ShopList shoplist;
 		protected ProgressDialog progressdialog;
 		protected int Num;
 
 		// コンストラクタ
-	    public ShopListTask(ShopInfos shopinfosP, ShopList shoplistP) {
-	    	this.shopinfos = shopinfosP;
-	    	this.shoplist = shoplistP;
+	    public ShopListTask() {
+	    	this.Num = 0;
 	    }
 
 		@Override
 		protected void onPreExecute() {
 			// バックグラウンドの処理前にUIスレッドでダイアログ表示
-			progressdialog = new ProgressDialog(this.shoplist);
-			progressdialog.setMessage(this.shoplist.getResources().getText(R.string.label_dataloading));
+			progressdialog = new ProgressDialog(ShopList.this);
+			progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
 			progressdialog.setIndeterminate(true);
 			progressdialog.show();
 		}
@@ -256,7 +245,7 @@ public class ShopList extends Activity {
 		// バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
-	    	this.Num = this.shopinfos.ImportData();
+	    	this.Num = shopinfos.ImportData();
 	    	return(this.Num);
 	    }
 
@@ -267,7 +256,7 @@ public class ShopList extends Activity {
 	    	progressdialog.dismiss();
 
 	    	// 追加読み込み完了
-			this.shoplist.closeMore(this.Num);
+			closeMore(this.Num);
 	    }
 	}
 }

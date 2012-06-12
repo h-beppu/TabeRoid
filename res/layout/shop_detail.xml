@@ -305,19 +305,45 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/button_share_map"
-			    	android:layout_gravity="center" />
+			    	android:layout_gravity="center"
+					android:layout_span="2" />
 			</TableRow>
 		</TableLayout>
 	</LinearLayout>
 	<!--②タブ2のレイアウト定義-->
-	<ListView
-		android:id="@+id/listview_reviews" 
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent" />
+	<LinearLayout
+		android:id="@+id/view2"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+			android:layout_height="?android:attr/listPreferredItemHeight"
+    		android:padding="6dip"
+    		android:layout_gravity="left"
+    		android:gravity="left"
+		    android:background="@color/bgcolor">
+			<ImageView
+				android:id="@+id/Photo2"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_marginRight="6dip" />
+   	    	<TextView
+				android:id="@+id/RestaurantName2"
+				android:layout_width="wrap_content"
+   	    	    android:layout_height="wrap_content"
+   	    	    android:textSize="24sp"
+   	    	    android:textColor="@color/header_color" />
+		</LinearLayout>
+		<ListView
+			android:id="@+id/listview_reviews" 
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent" />
+	</LinearLayout>
 	<!--③タブ3のレイアウト定義-->
 	<TextView android:id="@+id/view3"
 		android:background="@color/bgcolor"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:text="tab2" />
+		android:text="tab3" />
 </FrameLayout>

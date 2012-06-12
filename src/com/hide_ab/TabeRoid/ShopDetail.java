@@ -39,7 +39,7 @@ public class ShopDetail extends TabActivity {
 	    TabHost tabHost = getTabHost();
 	    LayoutInflater.from(this).inflate(R.layout.shop_detail, tabHost.getTabContentView(), true);
 	    tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getResources().getString(R.string.label_tab1)).setContent(R.id.view1));
-	    tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.label_tab2)).setContent(R.id.listview_reviews));
+	    tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.label_tab2)).setContent(R.id.view2));
 	    tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator(getResources().getString(R.string.label_tab3)).setContent(R.id.view3));
 
 		// 検索結果店舗データオブジェクト生成
@@ -127,8 +127,17 @@ public class ShopDetail extends TabActivity {
 			ivPhoto.setImageBitmap(shopInfo.getPhoto());
 		}
 
+        //
+        TextView tvRestaurantName2 = (TextView)findViewById(R.id.RestaurantName2);
+        tvRestaurantName2.setText(shopInfo.getRestaurantName());
+
+        if(shopInfo.getPhoto() != null) {
+			ImageView ivPhoto2 = (ImageView)findViewById(R.id.Photo2);
+			ivPhoto2.setImageBitmap(shopInfo.getPhoto());
+		}
+
         // コメントを取得
-    	ShopDetailTask task = new ShopDetailTask(shopInfo, ShopDetail.this);
+    	ShopDetailTask task = new ShopDetailTask(shopInfo);
     	task.execute();
 
         this.Lat = shopInfo.getLat();
@@ -140,7 +149,7 @@ public class ShopDetail extends TabActivity {
         // 『地図で見る』ボタンクリックハンドラ
         button_share_map.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
-        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + Lat + "," + Lon + "?z=18"));
+        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Lat + "," + Lon + "&zoom=18"));
         		startActivity(intent);
         	}
         });
@@ -171,13 +180,14 @@ public class ShopDetail extends TabActivity {
     }
 */
 
-
-
-
+    //
+    //
+    //
 	class ShopDetailAdapter extends ArrayAdapter<ReviewInfo> {
 		private ArrayList<ReviewInfo> List;
 		private LayoutInflater inflater;
 		private Button button_review_more;
+		private TextView text_review_more;
 
 		@SuppressWarnings("unchecked")
 		public ShopDetailAdapter(Context context, int textViewResourceId, ArrayList<ReviewInfo> List) {
@@ -305,10 +315,10 @@ public class ShopDetail extends TabActivity {
 */
 
 		        // 『もっと読む』ボタン取得
-		        button_review_more = (Button)view.findViewById(R.id.button_review_more);
+		        text_review_more = (TextView)view.findViewById(R.id.text_review_more);
 
 		        // 『もっと読む』ボタンクリックハンドラ
-		        button_review_more.setOnClickListener(new View.OnClickListener() {
+		        text_review_more.setOnClickListener(new View.OnClickListener() {
 		        	public void onClick(View view) {
 		        		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewInfo.getPcSiteUrl()));
 		        		startActivity(intent);
@@ -325,16 +335,13 @@ public class ShopDetail extends TabActivity {
 	class ShopDetailTask extends AsyncTask<Integer, Integer, Integer> {
 		// 店舗データオブジェクト
 		protected ShopInfo shopinfo;
-		// アクティビティ
-		protected ShopDetail shopdetail;
 		// 待機ダイアログ
 		protected ProgressDialog progressdialog;
 		protected int Num;
 
 		// コンストラクタ
-	    public ShopDetailTask(ShopInfo shopinfo, ShopDetail shopdetail) {
+	    public ShopDetailTask(ShopInfo shopinfo) {
 	    	this.shopinfo = shopinfo;
-	    	this.shopdetail = shopdetail;
 	    }
 
 		@Override
@@ -362,7 +369,7 @@ public class ShopDetail extends TabActivity {
 //	    	progressdialog.dismiss();
 
 			// "ShopList"画面に移行
-			this.shopdetail.closeReview(this.shopinfo);
+			closeReview(this.shopinfo);
 	    }
 	}
 }

@@ -60,7 +60,7 @@ public class TabeRoid extends Activity implements LocationListener {
 
         		// 情報はバックグラウンドで取得
         		shopinfos.preSearch("gps", Lat, Lon, "");
-            	TabeRoidTask task = new TabeRoidTask(shopinfos, TabeRoid.this);
+            	TabeRoidTask task = new TabeRoidTask();
             	task.execute();
 
             	// 検索結果の店舗情報を取得
@@ -89,7 +89,7 @@ public class TabeRoid extends Activity implements LocationListener {
 
         		// 情報はバックグラウンドで取得
         		shopinfos.preSearch("station", "", "", Station);
-            	TabeRoidTask task = new TabeRoidTask(shopinfos, TabeRoid.this);
+            	TabeRoidTask task = new TabeRoidTask();
             	task.execute();
         	}
         });
@@ -168,31 +168,24 @@ public class TabeRoid extends Activity implements LocationListener {
     //
     //
 	class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
-		// 検索結果店舗データオブジェクト
-		protected ShopInfos shopinfos;
-		// アクティビティ
-		protected TabeRoid taberoid;
 		protected ProgressDialog progressdialog;
 		protected int Num;
 
 		// コンストラクタ
-	    public TabeRoidTask(ShopInfos shopinfos, TabeRoid taberoid) {
-	    	this.shopinfos = shopinfos;
-	    	this.taberoid = taberoid;
-
+	    public TabeRoidTask() {
 	    	// デフォルト写真の設定
-			Resources r = this.taberoid.getResources();
-	    	this.shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
+			Resources r = getResources();
+	    	shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
 	    	// 評価マーク素材
-	    	this.shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
-	    	this.shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
+	    	shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
+	    	shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
 	    }
 
 		@Override
 		protected void onPreExecute() {
 	    	// バックグラウンドの処理前にUIスレッドでダイアログ表示
-			progressdialog = new ProgressDialog(this.taberoid);
-			progressdialog.setMessage(this.taberoid.getResources().getText(R.string.label_dataloading));
+			progressdialog = new ProgressDialog(TabeRoid.this);
+			progressdialog.setMessage(getResources().getText(R.string.label_dataloading));
 			progressdialog.setIndeterminate(true);
 			progressdialog.show();
 		}
@@ -200,7 +193,7 @@ public class TabeRoid extends Activity implements LocationListener {
 		// バックグラウンドで実行する処理
 	    @Override
 	    protected Integer doInBackground(Integer... params) {
-	    	this.Num = this.shopinfos.ImportData();
+	    	this.Num = shopinfos.ImportData();
 	    	return(this.Num);
 	    }
 
@@ -210,11 +203,11 @@ public class TabeRoid extends Activity implements LocationListener {
 			// 処理中ダイアログをクローズ
 	    	progressdialog.dismiss();
 
-	    	TextView locationText = (TextView)this.taberoid.findViewById(R.id.text_location);
+	    	TextView locationText = (TextView)findViewById(R.id.text_location);
 	        locationText.setText("Click" + this.Num);
 
 			// "ShopList"画面に移行
-			this.taberoid.openShopList();
+			openShopList();
 	    }
 	}
 }
