@@ -35,12 +35,15 @@ public class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
     	
     	ArrayList<ShopInfo> List = this.shopinfos.getList();
         for(int i = 0; i < List.size(); i++) {
-            // ‰æ‘œ‚ÌŽæ“¾
             shopinfo = List.get(i);
-            bitmap = ImportPhoto(shopinfo.getRcd());
-            shopinfo.setPhoto(bitmap);
+            // ‰æ‘œ‚ª–¢Žæ“¾‚È‚ç
+            if(shopinfo.getPhoto() == null) {
+                // ‰æ‘œ‚ÌŽæ“¾
+            	bitmap = ImportPhoto(shopinfo.getRcd());
+            	shopinfo.setPhoto(bitmap);
 
-        	publishProgress(0);
+            	publishProgress(0);
+            }
         }
         return(0);
     }

@@ -40,16 +40,16 @@ public class ShopList extends Activity {
 	    setContentView(R.layout.shop_list);
 
 		// 検索結果店舗データオブジェクト生成
-	    shopinfos = (ShopInfos)this.getApplication();
+	    this.shopinfos = (ShopInfos)this.getApplication();
 
 	    // 検索結果の店舗情報を取得
-	    int ItemNum = ImportData();
+	    int ItemNum = this.ImportData();
 
 	    TextView text_result = (TextView)findViewById(R.id.text_result);
 	    text_result.setText(ItemNum + "件見つかりました");
 
 	    // ListからShopAdapterを生成
-	    shoplistadapter = new ShopListAdapter(this, R.layout.shop_listrow, shopinfos.getList());
+	    this.shoplistadapter = new ShopListAdapter(this, R.layout.shop_listrow, shopinfos.getList());
 
 		// 画像はバックグラウンドで取得
 		ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);   
@@ -67,7 +67,20 @@ public class ShopList extends Activity {
 	    	public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
 	    		// フッタをクリックされた場合
 	    		if(view.getId() == R.id.Footer) {
-	    			ImportData();
+	    		    // 検索結果の店舗情報を取得(追加分)
+//	    			ImportData();
+
+	    			// 画像はバックグラウンドで取得
+//	    			ImageDrawer imagedrawer = new ImageDrawer(shopinfos, shoplistadapter);   
+//	    			imagedrawer.execute();
+
+	    	    	// listview_resultsからフッターを削除
+	    	    	ListView listview_results = (ListView)findViewById(R.id.listview_results);
+	    	    	listview_results.removeFooterView(getLayoutInflater().inflate(R.layout.shop_listfooter, null));
+
+	    	    	// 再描画
+//	    	    	listview_results.invalidateViews();
+//	    			shoplistadapter.notifyDataSetChanged();
 	    		}
 	    		// フッタ以外(店舗情報)をクリックされた場合
 	    		else {
