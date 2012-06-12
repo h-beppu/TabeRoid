@@ -3,7 +3,7 @@ package com.hide_ab.TabeRoid;
 import java.util.ArrayList;
 
 import android.app.ProgressDialog;
-import android.app.TabActivity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-public class ShopDetail extends TabActivity {
+public class ShopDetail extends Activity {
 	// 検索結果店舗データオブジェクト
 	protected ShopInfos shopinfos;
 	// ListAdapter
@@ -35,13 +35,18 @@ public class ShopDetail extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.shop_detail);
 
 	    // 画面構成を適用
-	    TabHost tabHost = getTabHost();
-	    LayoutInflater.from(this).inflate(R.layout.shop_detail, tabHost.getTabContentView(), true);
+        // TabHostオブジェクト取得   
+        TabHost tabHost = (TabHost)findViewById(android.R.id.tabhost);       
+        tabHost.setup();   
+        // タブ設定
 	    tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getResources().getString(R.string.label_tab1)).setContent(R.id.view1));
 	    tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.label_tab2)).setContent(R.id.view2));
 	    tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator(getResources().getString(R.string.label_tab3)).setContent(R.id.view3));
+        // 初期表示設定
+        tabHost.setCurrentTab(0);
 
 		// 検索結果店舗データオブジェクト生成
 	    shopinfos = (ShopInfos)this.getApplication();
@@ -196,13 +201,13 @@ public class ShopDetail extends TabActivity {
     }
 
 	// ダイアログの表示
-    protected void showDialog(final TabActivity activity, String title, String text) {
+    protected void showDialog(final Activity activity, String title, String text) {
     	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
     	ad.setTitle(title);
     	ad.setMessage(text);
     	ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
     		public void onClick(DialogInterface dialog, int wichiButton) {
-    			activity.setResult(TabActivity.RESULT_OK);
+    			activity.setResult(Activity.RESULT_OK);
     		}
     	});
     	ad.create();
