@@ -29,6 +29,7 @@ public class ShopList extends Activity {
 	private ShopListAdapter shoplistadapter = null;
 	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&";
 //	protected static final String XML_URL_D = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&Datum=world&Latitude=35.726&Longitude=139.988";
+	protected int PageNum = 0;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -56,17 +57,27 @@ public class ShopList extends Activity {
 
     	// ShopAdapterをShopList.xml内にあるlistview_resultsに渡して内容を表示する
     	ListView listview_results = (ListView)findViewById(R.id.listview_results);
+    	// listview_resultsにフッターを追加
+    	listview_results.addFooterView(getLayoutInflater().inflate(R.layout.shop_listfooter, null), null, true);
+    	// listview_resultsにshoplistadapterをセット
     	listview_results.setAdapter(shoplistadapter);
 
     	// listview_resultsにOnItemClickListenerを設定
     	listview_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	    	public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
-	    		ShopInfo shopInfo = shopinfos.getInfo(position);
-	    		if(shopInfo.getRcd() != "") {
-//	    			showDialog(ShopList.this, "", "ボタンを押した"+shopInfo.getRcd());
-	    			Intent intent = new Intent(ShopList.this, ShopDetail.class);
-	    			intent.putExtra("Position", position);
-	    			startActivityForResult(intent, 0);
+	    		// フッタをクリックされた場合
+	    		if(view.getId() == R.id.Footer) {
+	    			ImportData();
+	    		}
+	    		// フッタ以外(店舗情報)をクリックされた場合
+	    		else {
+	    			ShopInfo shopInfo = shopinfos.getInfo(position);
+	    			if(shopInfo.getRcd() != "") {
+//	    				showDialog(ShopList.this, "", "ボタンを押した"+shopInfo.getRcd());
+	    				Intent intent = new Intent(ShopList.this, ShopDetail.class);
+	    				intent.putExtra("Position", position);
+	    				startActivityForResult(intent, 0);
+	    			}
 	    		}
 	    	}
 	    }); 
@@ -79,6 +90,9 @@ public class ShopList extends Activity {
 
 		URL url = null;
         Document doc = null;
+
+        // ページをインクリメント
+        this.PageNum++;
 
         try {
             // 呼び出し元からパラメータ取得
@@ -95,6 +109,7 @@ public class ShopList extends Activity {
             	XmlUrl = XML_URL + "Station=" + URLEncoder.encode(Stations);
             }
 //          XmlUrl = XML_URL_D;
+            XmlUrl += "&PageNum=" + this.PageNum;
 
             // 指定した URL の作成
             url = new URL(XmlUrl);

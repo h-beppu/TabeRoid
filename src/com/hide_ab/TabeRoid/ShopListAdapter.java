@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 @SuppressWarnings("rawtypes")
-public class ShopListAdapter extends ArrayAdapter {
+public class ShopListAdapter extends ArrayAdapter<ShopInfo> {
 	private ArrayList<ShopInfo> List;
 	private LayoutInflater inflater;
 
