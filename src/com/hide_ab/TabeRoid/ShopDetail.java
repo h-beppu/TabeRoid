@@ -1,18 +1,20 @@
 package com.hide_ab.TabeRoid;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-public class ShopDetail extends Activity {
+public class ShopDetail extends TabActivity {
 	// 検索結果店舗データオブジェクト
 	protected ShopInfos shopinfos;
 	// ListAdapter
@@ -26,7 +28,11 @@ public class ShopDetail extends Activity {
 	    super.onCreate(savedInstanceState);
 
 	    // 画面構成を適用
-	    setContentView(R.layout.shop_detail);
+	    TabHost tabHost = getTabHost();
+	    LayoutInflater.from(this).inflate(R.layout.shop_detail, tabHost.getTabContentView(), true);
+	    tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getResources().getString(R.string.label_tab1)).setContent(R.id.view1));
+	    tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.label_tab2)).setContent(R.id.listview_reviews));
+	    tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator(getResources().getString(R.string.label_tab3)).setContent(R.id.view3));
 
 		// 検索結果店舗データオブジェクト生成
 	    shopinfos = (ShopInfos)this.getApplication();
@@ -121,7 +127,7 @@ public class ShopDetail extends Activity {
     	// listview_reviewsにshopdetailadapterをセット
     	listview_reviews.setAdapter(shopdetailadapter);
     }
-
+/*
 	// ダイアログの表示
     protected void showDialog(final Activity activity, String title, String text) {
     	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
@@ -135,4 +141,5 @@ public class ShopDetail extends Activity {
     	ad.create();
     	ad.show();
     }
+*/
 }

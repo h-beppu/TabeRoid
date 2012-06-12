@@ -1,255 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/bgcolor">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    	android:layout_width="fill_parent"
-		android:layout_height="?android:attr/listPreferredItemHeight"
-    	android:padding="6dip"
-    	android:layout_gravity="left"
-    	android:gravity="left">
-		<ImageView
-			android:id="@+id/Photo"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:layout_marginRight="6dip" />
-   	    <TextView
-			android:id="@+id/RestaurantName"
-			android:layout_width="wrap_content"
-   	        android:layout_height="wrap_content"
-   	        android:textSize="24sp"
-   	        android:textColor="@color/header_color" />
+    android:layout_height="fill_parent">
+	<LinearLayout
+		android:id="@+id/view1"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+			android:layout_height="?android:attr/listPreferredItemHeight"
+    		android:padding="6dip"
+    		android:layout_gravity="left"
+    		android:gravity="left"
+		    android:background="@color/bgcolor">
+			<ImageView
+				android:id="@+id/Photo"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_marginRight="6dip" />
+   	    	<TextView
+				android:id="@+id/RestaurantName"
+				android:layout_width="wrap_content"
+   	    	    android:layout_height="wrap_content"
+   	    	    android:textSize="24sp"
+   	    	    android:textColor="@color/header_color" />
+		</LinearLayout>
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:stretchColumns="1"
+			android:shrinkColumns="1"
+		    android:background="@color/bgcolor">
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_totalscore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/TotalScore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+			   	    android:layout_height="wrap_content"
+			   	    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_tastescore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/TasteScore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+	   			    android:layout_height="wrap_content"
+	   			    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_servicescore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/ServiceScore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+	   			    android:layout_height="wrap_content"
+	   			    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_moodscore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/MoodScore"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+	   			    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_situation"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Situation"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_dinnerprice"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/DinnerPrice"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_lunchprice"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/LunchPrice"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_category"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Category"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_station"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Station"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_address"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Address"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_tel"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Tel"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_businesshours"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/BusinessHours"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_holiday"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/Holiday"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView
+					android:text="@string/label_latlon"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			   	<TextView
+					android:id="@+id/LatLon"
+			        android:textSize="12sp"
+					android:layout_width="wrap_content"
+		   		    android:layout_height="wrap_content"
+		   		    android:textColor="@color/header_color" />
+			</TableRow>
+			<TableRow
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<Button
+					android:id="@+id/button_share_map"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/button_share_map"
+			    	android:layout_gravity="center" />
+			</TableRow>
+		</TableLayout>
 	</LinearLayout>
-	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:stretchColumns="1"
-		android:shrinkColumns="1"
-	    android:background="@color/bgcolor">
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_totalscore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/TotalScore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-		   	    android:layout_height="wrap_content"
-		   	    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_tastescore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/TasteScore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_servicescore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/ServiceScore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_moodscore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/MoodScore"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-   			    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_situation"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Situation"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_dinnerprice"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/DinnerPrice"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_lunchprice"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/LunchPrice"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_category"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Category"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_station"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Station"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_address"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Address"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_tel"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Tel"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_businesshours"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/BusinessHours"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_holiday"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/Holiday"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
-				android:text="@string/label_latlon"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		   	<TextView
-				android:id="@+id/LatLon"
-		        android:textSize="12sp"
-				android:layout_width="wrap_content"
-	   		    android:layout_height="wrap_content"
-	   		    android:textColor="@color/header_color" />
-		</TableRow>
-		<TableRow
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<Button
-				android:id="@+id/button_share_map"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/button_share_map"
-		    	android:layout_gravity="center" />
-		</TableRow>
-	</TableLayout>
+	<!--②タブ2のレイアウト定義-->
 	<ListView
 		android:id="@+id/listview_reviews" 
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent" />
-</LinearLayout>
+	<!--③タブ3のレイアウト定義-->
+	<TextView android:id="@+id/view3"
+		android:background="@color/bgcolor"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:text="tab2" />
+</FrameLayout>
