@@ -8,13 +8,14 @@ public class ShopDetailTask extends AsyncTask<Integer, Integer, Integer> {
 	protected ShopInfo shopinfo;
 	// アクティビティ
 	protected ShopDetail shopdetail;
+	// 待機ダイアログ
 	protected ProgressDialog progressdialog;
 	protected int Num;
 
 	// コンストラクタ
-    public ShopDetailTask(ShopInfo shopinfoP, ShopDetail shopdetailP) {
-    	this.shopinfo = shopinfoP;
-    	this.shopdetail = shopdetailP;
+    public ShopDetailTask(ShopInfo shopinfo, ShopDetail shopdetail) {
+    	this.shopinfo = shopinfo;
+    	this.shopdetail = shopdetail;
     }
 
 	@Override
@@ -42,6 +43,6 @@ public class ShopDetailTask extends AsyncTask<Integer, Integer, Integer> {
 //    	progressdialog.dismiss();
 
 		// "ShopList"画面に移行
-		this.shopdetail.closeComment(this.shopinfo);
+		this.shopdetail.closeReview(this.shopinfo);
     }
 }

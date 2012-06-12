@@ -3,6 +3,8 @@ package com.hide_ab.TabeRoid;
 import android.os.AsyncTask;
 import android.widget.TextView;
 import android.app.ProgressDialog; 
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 
 public class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
 	// 検索結果店舗データオブジェクト
@@ -13,9 +15,13 @@ public class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
 	protected int Num;
 
 	// コンストラクタ
-    public TabeRoidTask(ShopInfos shopinfosP, TabeRoid taberoidP) {
-    	this.shopinfos = shopinfosP;
-    	this.taberoid = taberoidP;
+    public TabeRoidTask(ShopInfos shopinfos, TabeRoid taberoid) {
+    	this.shopinfos = shopinfos;
+    	this.taberoid = taberoid;
+
+    	// デフォルト写真の設定
+		Resources r = this.taberoid.getResources();
+    	this.shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
     }
 
 	@Override

@@ -13,6 +13,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 public class ShopInfos extends Application {
 	// 表示するデータのリスト
@@ -22,14 +23,16 @@ public class ShopInfos extends Application {
     // ベースURL
 	protected String XmlUrlBase;
 	// API URL
-	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&";
+	protected static final String XML_URL = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&ResultSet=large&";
 //	protected static final String XML_URL_D = "http://api.tabelog.com/Ver2.1/RestaurantSearch/?Key=96d24714e814675c7a8cd129c18608151cf2bf9b&Datum=world&Latitude=35.726&Longitude=139.988";
 
-	protected TabeRoid taberoid;
+//	protected TabeRoid taberoid;
 	protected String SearchKey;
 	protected String Lat;
 	protected String Lon;
 	protected String Station;
+
+	public Bitmap DefaultPhoto;
 
 	@Override
 	public void onCreate() {
@@ -100,9 +103,23 @@ public class ShopInfos extends Application {
             	String Rcd = "";
             	String RestaurantName = "";
             	String TabelogUrl = "";
+            	String TabelogMobileUrl = "";
             	String TotalScore = "";
+            	String TasteScore = "";
+            	String ServiceScore = "";
+            	String MoodScore = "";
+            	String Situation = "";
+            	String DinnerPrice = "";
+            	String LunchPrice = "";
             	String Category = "";
             	String Station = "";
+            	String Address = "";
+            	String Tel = "";
+            	String BusinessHours = "";
+            	String Holiday = "";
+            	String Lat = "";
+            	String Lon = "";
+            	Bitmap Photo = null;
 
             	TmpNode = (Element)ItemNodes.item(i);
 
@@ -136,6 +153,16 @@ public class ShopInfos extends Application {
             		}
             	}
 
+            	TmpNodes = TmpNode.getElementsByTagName("TabelogMobileUrl");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			TabelogMobileUrl = ell.getNodeValue();
+            		}
+            	}
+
             	TmpNodes = TmpNode.getElementsByTagName("TotalScore");
             	TmpNodesLen = TmpNodes.getLength();
             	if(TmpNodesLen > 0) {
@@ -143,6 +170,66 @@ public class ShopInfos extends Application {
             		Node ell = (Node)TmpNode2.getFirstChild();
             		if(ell != null) {
             			TotalScore = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("TasteScore");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			TasteScore = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("ServiceScore");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			ServiceScore = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("MoodScore");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			MoodScore = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("Situation");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Situation = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("DinnerPrice");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			DinnerPrice = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("LunchPrice");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			LunchPrice = ell.getNodeValue();
             		}
             	}
 
@@ -166,16 +253,90 @@ public class ShopInfos extends Application {
             		}
             	}
 
+            	TmpNodes = TmpNode.getElementsByTagName("Address");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Address = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("Tel");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Tel = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("BusinessHours");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			BusinessHours = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("Holiday");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Holiday = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("Latitude");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Lat = ell.getNodeValue();
+            		}
+            	}
+
+            	TmpNodes = TmpNode.getElementsByTagName("Longitude");
+            	TmpNodesLen = TmpNodes.getLength();
+            	if(TmpNodesLen > 0) {
+            		TmpNode2 = (Element)TmpNodes.item(0);
+            		Node ell = (Node)TmpNode2.getFirstChild();
+            		if(ell != null) {
+            			Lon = ell.getNodeValue();
+            		}
+            	}
+
             	// 取得した各データをshopInfoに格納
             	ShopInfo shopInfo = new ShopInfo();
             	shopInfo.setRcd(Rcd);
             	shopInfo.setRestaurantName(RestaurantName);
             	shopInfo.setTabelogUrl(TabelogUrl);
+            	shopInfo.setTabelogMobileUrl(TabelogMobileUrl);
             	shopInfo.setTotalScore(TotalScore);
+            	shopInfo.setTasteScore(TasteScore);
+            	shopInfo.setServiceScore(ServiceScore);
+            	shopInfo.setMoodScore(MoodScore);
+            	shopInfo.setSituation(Situation);
+            	shopInfo.setDinnerPrice(DinnerPrice);
+            	shopInfo.setLunchPrice(LunchPrice);
             	shopInfo.setCategory(Category);
             	shopInfo.setStation(Station);
+            	shopInfo.setAddress(Address);
+            	shopInfo.setTel(Tel);
+            	shopInfo.setBusinessHours(BusinessHours);
+            	shopInfo.setHoliday(Holiday);
+            	shopInfo.setLat(Lat);
+            	shopInfo.setLon(Lon);
+        		shopInfo.setDefaultPhoto(this.DefaultPhoto);
 
-            	// リストに追加
+        		// リストに追加
             	this.putInfo(shopInfo);
             }
         } catch (Exception e) {

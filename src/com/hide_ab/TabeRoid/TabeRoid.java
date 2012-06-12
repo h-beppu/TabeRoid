@@ -46,7 +46,9 @@ public class TabeRoid extends Activity implements LocationListener {
         Button button_search_gps = (Button)findViewById(R.id.button_search_gps);
         Button button_search_station = (Button)findViewById(R.id.button_search_station);
 
-        // 『検索』ボタンクリックハンドラ
+//		this.shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
+
+		// 『検索』ボタンクリックハンドラ
         button_search_gps.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View view) {
         		// GPSの更新を停止

@@ -32,9 +32,15 @@ public class ShopDetail extends Activity {
 
         ShopInfo shopInfo = shopinfos.getInfo(position);
 
-        TextView tvShopName = (TextView)findViewById(R.id.ShopName);
-        tvShopName.setText(shopInfo.getRestaurantName());
+        TextView tvRestaurantName = (TextView)findViewById(R.id.RestaurantName);
+        tvRestaurantName.setText(shopInfo.getRestaurantName());
+/*
+        TextView tvTabelogUrl = (TextView)findViewById(R.id.TabelogUrl);
+        tvTabelogUrl.setText(shopInfo.getTabelogUrl());
 
+        TextView tvTabelogMobileUrl = (TextView)findViewById(R.id.TabelogMobileUrl);
+        tvTabelogMobileUrl.setText(shopInfo.getTabelogMobileUrl());
+*/
         TextView tvTotalScore = (TextView)findViewById(R.id.TotalScore);
         tvTotalScore.setText(shopInfo.getTotalScore());
 
@@ -50,11 +56,32 @@ public class ShopDetail extends Activity {
         TextView tvSituation = (TextView)findViewById(R.id.Situation);
         tvSituation.setText(shopInfo.getSituation());
 
+        TextView tvDinnerPrice = (TextView)findViewById(R.id.DinnerPrice);
+        tvDinnerPrice.setText(shopInfo.getDinnerPrice());
+
+        TextView tvLunchPrice = (TextView)findViewById(R.id.LunchPrice);
+        tvLunchPrice.setText(shopInfo.getLunchPrice());
+
         TextView tvCategory = (TextView)findViewById(R.id.Category);
         tvCategory.setText(shopInfo.getCategory());
 
         TextView tvStation = (TextView)findViewById(R.id.Station);
         tvStation.setText(shopInfo.getStation());
+
+        TextView tvAddress = (TextView)findViewById(R.id.Address);
+        tvAddress.setText(shopInfo.getAddress());
+
+        TextView tvTel = (TextView)findViewById(R.id.Tel);
+        tvTel.setText(shopInfo.getTel());
+
+        TextView tvBusinessHours = (TextView)findViewById(R.id.BusinessHours);
+        tvBusinessHours.setText(shopInfo.getBusinessHours());
+
+        TextView tvHoliday = (TextView)findViewById(R.id.Holiday);
+        tvHoliday.setText(shopInfo.getHoliday());
+
+        TextView tvLatLon = (TextView)findViewById(R.id.LatLon);
+        tvLatLon.setText(shopInfo.getLat() + " " + shopInfo.getLon());
 
         if(shopInfo.getPhoto() != null) {
 			ImageView ivPhoto = (ImageView)findViewById(R.id.Photo);
@@ -67,13 +94,13 @@ public class ShopDetail extends Activity {
 	}
 
     // コメント取得完了
-    public void closeComment(ShopInfo shopinfo) {
+    public void closeReview(ShopInfo shopinfo) {
     	// ListからShopDetailAdapterを生成
-	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopinfo.getComments());
-    	// ShopDetailAdapterをShopDetail.xml内にあるlistview_commentsに渡して内容を表示する
-    	ListView listview_comments = (ListView)findViewById(R.id.listview_comments);
-    	// listview_commentにshopdetailadapterをセット
-    	listview_comments.setAdapter(shopdetailadapter);
+	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopinfo.getReviews());
+    	// ShopDetailAdapterをShopDetail.xml内にあるlistview_reviewsに渡して内容を表示する
+    	ListView listview_reviews = (ListView)findViewById(R.id.listview_reviews);
+    	// listview_reviewsにshopdetailadapterをセット
+    	listview_reviews.setAdapter(shopdetailadapter);
     }
 
 	// ダイアログの表示

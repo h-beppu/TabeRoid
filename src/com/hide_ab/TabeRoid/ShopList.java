@@ -27,7 +27,7 @@ public class ShopList extends Activity {
 		// 検索結果店舗データオブジェクト生成
 	    this.shopinfos = (ShopInfos)this.getApplication();
 
-	    TextView text_result = (TextView)findViewById(R.id.text_result);
+		TextView text_result = (TextView)findViewById(R.id.text_result);
 //	    text_result.setText(ItemNum + "件見つかりました");
 
 	    // ListからShopAdapterを生成
