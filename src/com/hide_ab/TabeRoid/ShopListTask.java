@@ -19,13 +19,11 @@ public class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
 
 	@Override
 	protected void onPreExecute() {
-/*
 		// バックグラウンドの処理前にUIスレッドでダイアログ表示
 		progressdialog = new ProgressDialog(this.shoplist);
 		progressdialog.setMessage(this.shoplist.getResources().getText(R.string.label_dataloading));
 		progressdialog.setIndeterminate(true);
 		progressdialog.show();
-*/
 	}
 
 	// バックグラウンドで実行する処理
@@ -39,7 +37,7 @@ public class ShopListTask extends AsyncTask<Integer, Integer, Integer> {
     @Override  
     protected void onPostExecute(Integer params) {
 		// 処理中ダイアログをクローズ
-//    	progressdialog.dismiss();
+    	progressdialog.dismiss();
 
     	// 追加読み込み完了
 		this.shoplist.closeMore();

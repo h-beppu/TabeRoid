@@ -1,6 +1,9 @@
 package com.hide_ab.TabeRoid;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +38,26 @@ public class ShopListAdapter extends ArrayAdapter<ShopInfo> {
 		ShopInfo shopInfo = (ShopInfo)List.get(position);
 		if(shopInfo != null) {
 			// スクリーンネームをビューにセット
+			ImageView image_photo = (ImageView)view.findViewById(R.id.image_photo);
+			if(image_photo != null) {
+				image_photo.setImageBitmap(shopInfo.getPhoto());
+			}
+
 			TextView tvRestaurantName = (TextView)view.findViewById(R.id.RestaurantName);
 			if(tvRestaurantName != null) {
 				tvRestaurantName.setText(shopInfo.getRestaurantName());
 			}
 
+			ImageView image_star = (ImageView)view.findViewById(R.id.image_star);
+			if(image_star != null) {
+				image_star.setImageBitmap(shopInfo.getTotalScoreStar());
+			}
+
 			TextView tvTotalScore = (TextView)view.findViewById(R.id.TotalScore);
 			if(tvTotalScore != null) {
-				tvTotalScore.setText(shopInfo.getTotalScore());
+				tvTotalScore.setText("("+shopInfo.getTotalScore()+")");
 			}
+
 
 			TextView tvCategory = (TextView)view.findViewById(R.id.Category);
 			if(tvCategory != null) {
@@ -53,11 +67,6 @@ public class ShopListAdapter extends ArrayAdapter<ShopInfo> {
 			TextView tvStation = (TextView)view.findViewById(R.id.Station);
 			if(tvStation != null) {
 				tvStation.setText(shopInfo.getStation());
-			}
-
-			ImageView image_photo = (ImageView)view.findViewById(R.id.image_photo);
-			if(image_photo != null) {
-				image_photo.setImageBitmap(shopInfo.getPhoto());
 			}
 		}
 		return view;

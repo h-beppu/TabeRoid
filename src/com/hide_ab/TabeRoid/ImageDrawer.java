@@ -29,8 +29,9 @@ public class ImageDrawer extends AsyncTask<Integer, Integer, Integer> {
             if(!shopinfo.getPhotoFlg()) {
                 // ‰æ‘œ‚ÌŽæ“¾
             	Photo = shopinfo.ImportPhoto();
-            	shopinfo.setPhoto(Photo);
-
+            	if(Photo != null) {
+            		shopinfo.setPhoto(Photo);
+            	}
             	publishProgress(0);
             }
         }

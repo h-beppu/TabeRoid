@@ -13,26 +13,37 @@
     <LinearLayout
 		android:orientation="vertical"
         android:layout_width="0dip"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
 		android:layout_weight="1">
-	        <TextView
-				android:id="@+id/RestaurantName"
-				android:layout_width="fill_parent"
-    	        android:layout_height="0dip"
-				android:layout_weight="1"
-    	        android:textColor="@color/text1_color"
-   		        android:textSize="12sp"
-				android:textStyle="bold"
-    	        android:gravity="center_vertical"/>
+	    <TextView
+			android:id="@+id/RestaurantName"
+			android:layout_width="fill_parent"
+    	    android:layout_height="0dip"
+			android:layout_weight="1"
+    	    android:textColor="@color/text1_color"
+   		    android:textSize="12sp"
+			android:textStyle="bold"
+    	    android:gravity="center_vertical"/>
+	    <LinearLayout
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+			android:layout_weight="1">
+	    	<ImageView
+				android:id="@+id/image_star"
+				android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+				android:layout_marginRight="6dip"
+    	    	android:src="@drawable/star_back"/>
     	    <TextView
 				android:id="@+id/TotalScore"
-				android:layout_width="fill_parent"
-    	        android:layout_height="0dip"
+				android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
 				android:layout_weight="1"
     	        android:textColor="@color/text2_color"
    		        android:textSize="12sp"
 				android:singleLine="true"
 				android:ellipsize="marquee"/>
+	    </LinearLayout>
         <TextView
 			android:id="@+id/Category"
 			android:layout_width="fill_parent"

@@ -22,6 +22,9 @@ public class TabeRoidTask extends AsyncTask<Integer, Integer, Integer> {
     	// デフォルト写真の設定
 		Resources r = this.taberoid.getResources();
     	this.shopinfos.DefaultPhoto = BitmapFactory.decodeResource(r, R.drawable.icon);
+    	// 評価マーク
+    	this.shopinfos.StarBack  = BitmapFactory.decodeResource(r, R.drawable.star_back);
+    	this.shopinfos.StarFront = BitmapFactory.decodeResource(r, R.drawable.star_front);
     }
 
 	@Override

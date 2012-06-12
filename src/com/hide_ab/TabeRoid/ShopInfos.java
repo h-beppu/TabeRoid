@@ -35,6 +35,8 @@ public class ShopInfos extends Application {
 	protected String Station;
 
 	public Bitmap DefaultPhoto;
+	public Bitmap StarBack;
+	public Bitmap StarFront;
 
 	@Override
 	public void onCreate() {
@@ -351,6 +353,7 @@ public class ShopInfos extends Application {
             	shopInfo.setHoliday(Holiday);
             	shopInfo.setLat(Lat);
             	shopInfo.setLon(Lon);
+        		shopInfo.setTotalScoreStar(this.StarFront);
         		shopInfo.setDefaultPhoto(this.DefaultPhoto);
 
         		// ƒŠƒXƒg‚É’Ç‰Á

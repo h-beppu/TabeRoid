@@ -34,6 +34,7 @@ public class ShopInfo {
 	private String Holiday;
 	private String Lat;
 	private String Lon;
+	private Bitmap TotalScoreStar;
 	private Bitmap Photo;
 	private Boolean PhotoFlg;
 	private ArrayList<ReviewInfo> Reviews;
@@ -63,6 +64,7 @@ public class ShopInfo {
 		this.Holiday = "";
 		this.Lat = "";
 		this.Lon = "";
+		this.TotalScoreStar = null;
 		this.Photo = null;
 		this.PhotoFlg = false;
 		this.Reviews = new ArrayList<ReviewInfo>();
@@ -218,6 +220,15 @@ public class ShopInfo {
 
 	public String getLon() {
 		return this.Lon;
+	}
+
+	public void setTotalScoreStar(Bitmap TotalScoreStar) {
+		Bitmap dst = Bitmap.createBitmap(TotalScoreStar, 0, 0, 250, 50);
+		this.TotalScoreStar = TotalScoreStar;
+	}
+
+	public Bitmap getTotalScoreStar() {
+		return this.TotalScoreStar;
 	}
 
 	public void setDefaultPhoto(Bitmap Photo) {
