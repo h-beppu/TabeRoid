@@ -392,7 +392,7 @@
 				</LinearLayout>
 				<com.google.android.maps.MapView
 					android:id="@+id/map"
-					android:apiKey="0G1IaHWhUplS-lnyCqUbUvAqtVEcxEKmDYU1V8g"
+					android:apiKey="0G1IaHWhUplRP8-a1VAJlUJcowNnnGNY0tFc3Mw"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
 					android:clickable="true" />
