@@ -33,10 +33,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_totalscore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/TotalScore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 		   	    android:layout_height="wrap_content"
 		   	    android:textColor="@color/header_color" />
@@ -46,10 +48,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_tastescore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/TasteScore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -59,10 +63,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_servicescore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/ServiceScore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -72,10 +78,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_moodscore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/MoodScore"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
    			    android:textColor="@color/header_color" />
@@ -89,6 +97,7 @@
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Situation"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -98,10 +107,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_dinnerprice"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/DinnerPrice"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -111,10 +122,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_lunchprice"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/LunchPrice"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -124,10 +137,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_category"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Category"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -137,10 +152,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_station"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Station"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -150,10 +167,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_address"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Address"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -163,10 +182,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_tel"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Tel"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -176,10 +197,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_businesshours"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/BusinessHours"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -189,10 +212,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_holiday"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/Holiday"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
@@ -202,10 +227,12 @@
 			android:layout_height="wrap_content">
 			<TextView
 				android:text="@string/label_latlon"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		   	<TextView
 				android:id="@+id/LatLon"
+		        android:textSize="12sp"
 				android:layout_width="wrap_content"
 	   		    android:layout_height="wrap_content"
 	   		    android:textColor="@color/header_color" />
