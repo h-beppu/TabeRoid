@@ -66,4 +66,8 @@
    	    android:layout_height="wrap_content"
    	    android:textColor="@color/header_color"
    	    android:text="@string/app_name" />
+	<ListView
+		android:id="@+id/listview_comments" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent" />
 </LinearLayout>

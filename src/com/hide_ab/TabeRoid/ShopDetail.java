@@ -1,14 +1,19 @@
 package com.hide_ab.TabeRoid;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class ShopDetail extends Activity {
 	// 検索結果店舗データオブジェクト
 	protected ShopInfos shopinfos;
+	// ListAdapter
+	private ShopDetailAdapter shopdetailadapter = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -55,5 +60,29 @@ public class ShopDetail extends Activity {
 			ImageView ivPhoto = (ImageView)findViewById(R.id.Photo);
 			ivPhoto.setImageBitmap(shopInfo.getPhoto());
 		}
+
+        // コメントを取得
+        int ItemNum = shopInfo.ImportData();
+
+	    // ListからShopDetailAdapterを生成
+	    this.shopdetailadapter = new ShopDetailAdapter(this, R.layout.shop_detailrow, shopInfo.getComments());
+    	// ShopDetailAdapterをShopDetail.xml内にあるlistview_commentsに渡して内容を表示する
+    	ListView listview_comments = (ListView)findViewById(R.id.listview_comments);
+    	// listview_commentにshopdetailadapterをセット
+    	listview_comments.setAdapter(shopdetailadapter);
 	}
+
+	// ダイアログの表示
+    protected void showDialog(final Activity activity, String title, String text) {
+    	AlertDialog.Builder ad = new AlertDialog.Builder(activity);
+    	ad.setTitle(title);
+    	ad.setMessage(text);
+    	ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    		public void onClick(DialogInterface dialog, int wichiButton) {
+    			activity.setResult(Activity.RESULT_OK);
+    		}
+    	});
+    	ad.create();
+    	ad.show();
+    }
 }
